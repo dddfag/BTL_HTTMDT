@@ -1,6 +1,4 @@
-import { DealOfTheMonth } from "./dealOfTheMonth";
 import { HomepageCategoryProducts } from "./homepageCategoryProducts";
-import { FeaturedCategories } from "./featuredCategories";
 import { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { ProductLoader } from "../../../components/loaders/productLoader";
@@ -23,13 +21,13 @@ const Index = () => {
   };
 
   const featuredProducts = allProductsData.filter((products) =>
-    products.categories["Featured Categories"].includes("featured")
+    products.categories["Danh mục nổi bật"].includes("Nổi bật")
   );
   const firstOrderDeals = allProductsData.filter((products) =>
-    products.categories["Featured Categories"].includes("first order deal")
+    products.categories["Danh mục nổi bật"].includes("Ưu đãi đơn hàng đầu tiên")
   );
   const bestDeals = allProductsData.filter((products) =>
-    products.categories["Featured Categories"].includes("discounts")
+    products.categories["Danh mục nổi bật"].includes("Giảm giá")
   );
 
   const categoriesArr = {
@@ -60,7 +58,7 @@ const Index = () => {
 
   return (
     <>
-      <h1 className="text-[40px] text-center font-bold">Our products</h1>
+      <h1 className="text-[40px] text-center font-bold">Sản phẩm của chúng tôi</h1>
       {isLoading ? (
         <ProductLoader />
       ) : (
@@ -72,19 +70,19 @@ const Index = () => {
           >
             <div className="cursor-pointer order-1 transition-all ease-in-out duration-[0.25s] homepage-active-category-tab">
               <h2 data-id="featuredProducts" className="text-center text-[24px] font-medium ">
-                Featured{" "}
+                Nổi bật
               </h2>
               <div className="bg-primaryColor h-[3px] w-0 "></div>
             </div>
             <div className="cursor-pointer order-2 transition-all ease-in-out duration-[0.25s]">
               <h2 data-id="firstOrderDeals" className="text-center text-[24px] font-medium ">
-                First order deals
+                Đơn hàng đầu tiên
               </h2>
               <div className="bg-primaryColor h-[3px] w-0"></div>
             </div>
             <div className="cursor-pointer order-0 transition-all ease-in-out duration-[0.25s]">
               <h2 data-id="bestDeals" className="text-center text-[24px] font-medium ">
-                Best Deals
+                Khuyến mãi tốt nhất
               </h2>
               <div className="bg-primaryColor h-[3px] w-0"></div>
             </div>
@@ -92,8 +90,6 @@ const Index = () => {
           <HomepageCategoryProducts currentlyRequestedCategories={currentlyRequestedCategories} />
         </>
       )}
-      <FeaturedCategories />
-      <DealOfTheMonth />
     </>
   );
 };

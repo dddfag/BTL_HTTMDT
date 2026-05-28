@@ -104,4 +104,93 @@ const validateUserAsAnAdmin = async (req, res) => {
 
   res.status(200).send("success");
 };
-module.exports = { createNewAdmin, removeAdmin, getAdminDatas, clearAdminJwt, validateUserAsAnAdmin };
+
+const getAllOrders = async (req, res) => {
+  try {
+    console.log("=== GET ALL ORDERS ===");
+    console.log("User:", res.locals.actionDoer);
+    
+    const users = await User.find({}).select("email username orders");
+    console.log("Found", users.length, "users");
+    
+    const allOrders = [];
+    users.forEach(user => {
+      user.orders.forEach(order => {
+        allOrders.push({
+          _id: order._id,
+          userEmail: user.email,
+          username: user.username,
+          fullName: order.fullName,
+          phoneNumber: order.phoneNumber,
+          address: order.address,
+          district: order.district,
+          ward: order.ward,
+          city: order.city,
+          country: order.country,
+          postalCode: order.postalCode,
+          productCount: order.products.length,
+          totalAmount: order.totalAmount,
+          paymentMethod: order.paymentMethod,
+          shippingMethod: order.shippingMethod,
+          deliveryStatus: order.deliveryStatus,
+          paymentStatus: order.paymentStatus,
+          createdAt: order.date,
+        });
+      });
+    });
+
+    // Sort by date descending (newest first)
+    allOrders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+    console.log("Returning", allOrders.length, "orders");
+
+    res.status(200).json({
+      success: true,
+      orders: allOrders,
+      totalOrders: allOrders.length,
+    });
+  } catch (error) {
+    throw new CustomErrorHandler(500, "Error fetching orders");
+  }
+};
+
+const updateOrderStatus = async (req, res) => {
+  try {
+    const { userEmail, orderId, deliveryStatus, paymentStatus } = req.body;
+
+    if (!userEmail || !orderId) {
+      throw new CustomErrorHandler(400, "User email and order ID are required");
+    }
+
+    const user = await User.findOne({ email: userEmail.toLowerCase() });
+    if (!user) {
+      throw new CustomErrorHandler(404, "User not found");
+    }
+
+    const order = user.orders.find(order => order._id.toString() === orderId);
+    if (!order) {
+      throw new CustomErrorHandler(404, "Order not found");
+    }
+
+    if (deliveryStatus) {
+      order.deliveryStatus = deliveryStatus;
+    }
+    if (paymentStatus) {
+      order.paymentStatus = paymentStatus;
+    }
+
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Order status updated successfully",
+    });
+  } catch (error) {
+    if (error instanceof CustomErrorHandler) {
+      throw error;
+    }
+    throw new CustomErrorHandler(500, "Error updating order status");
+  }
+};
+
+module.exports = { createNewAdmin, removeAdmin, getAdminDatas, clearAdminJwt, validateUserAsAnAdmin, getAllOrders, updateOrderStatus };

@@ -16,7 +16,7 @@ export const CheckoutPage = ({ setIsCartSectionActive }) => {
 
   const {
     isTokenValidLoader,
-    userData: { email, username, country, city, address, postalCode, shippingMethod },
+    userData: { email, username, fullName, country, city, address, postalCode, phoneNumber, shippingMethod },
   } = useSelector((state) => state.userAuth);
 
   const [totalAmountToBePaid, setTotalAmountToBePaid] = useState(0);
@@ -24,11 +24,14 @@ export const CheckoutPage = ({ setIsCartSectionActive }) => {
   const [checkoutFormData, setCheckoutFormData] = useState({
     username: username || "",
     email: email,
+    fullName: fullName || "",
     country: country || "",
     city: city || "",
     address: address || "",
     postalCode: postalCode || "",
-    phoneNumber: "",
+    phoneNumber: phoneNumber || "",
+    district: "",
+    ward: "",
     shippingMethod: shippingMethod || "",
     paymentMethod: "",
   });
@@ -41,7 +44,13 @@ export const CheckoutPage = ({ setIsCartSectionActive }) => {
     setCheckoutFormData((prevData) => {
       return { ...prevData, email: email };
     });
-  }, [email, username]);
+    setCheckoutFormData((prevData) => {
+      return { ...prevData, fullName: fullName };
+    });
+    setCheckoutFormData((prevData) => {
+      return { ...prevData, phoneNumber: phoneNumber };
+    });
+  }, [email, username, fullName, phoneNumber]);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -62,12 +71,15 @@ export const CheckoutPage = ({ setIsCartSectionActive }) => {
       return { productId: products._id, quantity: products.quantity };
     }),
     username: checkoutFormData.username,
+    fullName: checkoutFormData.fullName,
+    phoneNumber: checkoutFormData.phoneNumber,
     address: checkoutFormData.address,
+    district: checkoutFormData.district,
+    ward: checkoutFormData.ward,
     email: checkoutFormData.email,
     country: checkoutFormData.country,
     city: checkoutFormData.city,
     postalCode: checkoutFormData.postalCode,
-    phoneNumber: checkoutFormData.phoneNumber,
     shippingMethod: checkoutFormData.shippingMethod,
     paymentMethod: checkoutFormData.paymentMethod,
     deliveryStatus: "pending",
@@ -100,11 +112,14 @@ export const CheckoutPage = ({ setIsCartSectionActive }) => {
           ...prevData,
           username: "",
           email: email,
+          fullName: "",
           country: "",
           city: "",
           address: "",
           postalCode: "",
           phoneNumber: "",
+          district: "",
+          ward: "",
           shippingMethod: shippingMethod || "",
           paymentMethod: "",
         };
@@ -138,7 +153,7 @@ export const CheckoutPage = ({ setIsCartSectionActive }) => {
           </div>
         </div>
         <div className="flex flex-col-reverse lg:flex-row lg:flex lg:w-[96%] xl:w-[92%] lg:mx-auto lg:justify-between mb-20 lg:items-start">
-          <CheckoutForm {...{ placeOrderFn, checkoutFormData, setCheckoutFormData }} />
+          <CheckoutForm {...{ placeOrderFn, checkoutFormData, setCheckoutFormData, totalAmountToBePaid }} />
           <OrderSummary {...{ setTotalAmountToBePaid }} />
         </div>
       </>

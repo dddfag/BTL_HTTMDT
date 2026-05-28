@@ -12,8 +12,15 @@ import { motion } from "framer-motion";
 export const RegisterPage = () => {
   // check if input type=password is in password mode or text mode
   const [isInputValueInPassword, setIsInputValueInPassword] = useState(true);
+  const [isInputValueInConfirmPassword, setIsInputValueInConfirmPassword] = useState(true);
 
-  const [registerDetails, setRegisterDetails] = useState({ email: "", username: "", password: "" });
+  const [registerDetails, setRegisterDetails] = useState({
+    fullName: "",
+    phoneNumber: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
   const { isLoading } = useSelector((state) => state.userAuth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -21,22 +28,39 @@ export const RegisterPage = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
     let gmailInputDOM = e.currentTarget.querySelector("input[type='email']");
+    let passwordInputDOM = e.currentTarget.querySelectorAll("input[type='password'], input[data-type='password']")[0];
+    let confirmPasswordInputDOM = e.currentTarget.querySelectorAll("input[type='password'], input[data-type='password']")[1];
+
     if (!validateEmail(gmailInputDOM.value)) {
       gmailInputDOM.parentElement.nextElementSibling.style.display = "block";
-    } else {
-      let response = await dispatch(RegisterUser(registerDetails));
+      return;
+    }
 
-      if (!response.error) {
-        navigate("/login");
-        setRegisterDetails({ email: "", username: "", password: "" });
-      }
+    if (registerDetails.password !== registerDetails.confirmPassword) {
+      confirmPasswordInputDOM.parentElement.nextElementSibling.style.display = "block";
+      return;
+    } else {
+      confirmPasswordInputDOM.parentElement.nextElementSibling.style.display = "none";
+    }
+
+    let response = await dispatch(RegisterUser(registerDetails));
+
+    if (!response.error) {
+      navigate("/login");
+      setRegisterDetails({
+        fullName: "",
+        phoneNumber: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+      });
     }
   };
 
   return (
     <section className="mt-16 flex justify-center items-center  max-w-[340px] text-base  w-[92%] mx-auto">
       <form className="flex flex-col gap-4 w-[100%] " onSubmit={onSubmit}>
-        <h1 className="text-4xl font-bold text-center  font-RobotoCondensed">Create a new Account</h1>
+        <h1 className="text-4xl font-bold text-center  font-RobotoCondensed">Tạo tài khoản mới</h1>
         <div className="w-100% mt-4">
           <div className="authPage-input-container border-[1px] rounded relative border-secondaryColor focus-within:outline-none focus-within:border-primaryColor  w-[100%] h-[56px] ">
             <input
@@ -45,17 +69,36 @@ export const RegisterPage = () => {
               placeholder=" "
               name=""
               minLength="3"
-              maxLength="12"
               required
-              value={registerDetails.username}
+              value={registerDetails.fullName}
               onChange={(e) =>
                 setRegisterDetails((prevData) => {
-                  return { ...prevData, username: e.target.value };
+                  return { ...prevData, fullName: e.target.value };
                 })
               }
             />
             <label htmlFor="" className="absolute  top-[0.8rem] left-3 z-[-1]">
-              Username
+              Họ tên
+            </label>
+          </div>
+        </div>
+        <div className="w-100% ">
+          <div className="authPage-input-container border-[1px] rounded relative border-secondaryColor focus-within:outline-none focus-within:border-primaryColor  w-[100%] h-[56px] ">
+            <input
+              className="appearance-none absolute pl-3 top-0 left-0 focus:outline-none w-[100%] h-[100%] authPage-input bg-transparent"
+              type="tel"
+              placeholder=" "
+              name=""
+              required
+              value={registerDetails.phoneNumber}
+              onChange={(e) =>
+                setRegisterDetails((prevData) => {
+                  return { ...prevData, phoneNumber: e.target.value };
+                })
+              }
+            />
+            <label htmlFor="" className="absolute  top-[0.8rem] left-3 z-[-1]">
+              Số điện thoại
             </label>
           </div>
         </div>
@@ -78,10 +121,10 @@ export const RegisterPage = () => {
               }}
             />
             <label htmlFor="" className="absolute  top-[0.8rem] left-3 z-[-1]">
-              Email address
+              Địa chỉ email
             </label>
           </div>
-          <span className="text-[#fca311] font-RobotoCondensed hidden">Please enter a valid email address</span>
+          <span className="text-[#fca311] font-RobotoCondensed hidden">Vui lòng nhập địa chỉ email hợp lệ</span>
         </div>
         <div className="w-[100%]">
           <div className="authPage-input-container border-[1px] rounded relative border-secondaryColor focus-within:outline-none focus-within:border-primaryColor  w-[100%] h-[56px]">
@@ -100,7 +143,7 @@ export const RegisterPage = () => {
               }
             />
             <label htmlFor="" className="absolute  top-[0.8rem] left-3 z-[-1]">
-              Password
+              Mật khẩu
             </label>
             {isInputValueInPassword ? (
               <FaEye
@@ -115,6 +158,39 @@ export const RegisterPage = () => {
             )}
           </div>
         </div>
+        <div className="w-[100%]">
+          <div className="authPage-input-container border-[1px] rounded relative border-secondaryColor focus-within:outline-none focus-within:border-primaryColor  w-[100%] h-[56px]">
+            <input
+              className="appearance-none absolute pl-3 top-0 left-0 focus:outline-none w-[100%] h-[100%] authPage-input bg-transparent"
+              type={`${isInputValueInConfirmPassword ? "password" : "text"}`}
+              required
+              placeholder=" "
+              name=""
+              minLength="8"
+              value={registerDetails.confirmPassword}
+              onChange={(e) =>
+                setRegisterDetails((prevData) => {
+                  return { ...prevData, confirmPassword: e.target.value };
+                })
+              }
+            />
+            <label htmlFor="" className="absolute  top-[0.8rem] left-3 z-[-1]">
+              Xác nhận mật khẩu
+            </label>
+            {isInputValueInConfirmPassword ? (
+              <FaEye
+                className="w-6 h-6 absolute top-[0.8rem] right-4"
+                onClick={() => setIsInputValueInConfirmPassword(!isInputValueInConfirmPassword)}
+              />
+            ) : (
+              <FaEyeSlash
+                className="w-6 h-6 absolute top-[0.8rem] right-4"
+                onClick={() => setIsInputValueInConfirmPassword(!isInputValueInConfirmPassword)}
+              />
+            )}
+          </div>
+          <span className="text-[#fca311] font-RobotoCondensed hidden">Mật khẩu không khớp</span>
+        </div>
         <motion.button
           initial="initial"
           whileTap="click"
@@ -128,13 +204,13 @@ export const RegisterPage = () => {
             whileTap="animate"
             variants={cartTextChangeVariant}
           >
-            {isLoading ? <>Registering</> : "Register"}
+            {isLoading ? <>Đang đăng ký</> : "Đăng ký"}
           </motion.span>
         </motion.button>
         <span className=" text-center">
-          Already have an account?{" "}
+          Đã có tài khoản?{" "}
           <Link to="/login" className="text-primaryColor">
-            Log in
+            Đăng nhập
           </Link>
         </span>
 

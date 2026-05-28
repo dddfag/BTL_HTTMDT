@@ -22,7 +22,7 @@ export const DeleteProductModal = ({ isDeleteModalOn, setIsDeleteModalOn, _id })
       setIsDeleteLoading(false);
       setIsDeleteModalOn(false);
 
-      toast("Product has been successfully deleted", {
+      toast("Sản phẩm đã được xóa thành công", {
         type: "success",
         autoClose: 3000,
         position: "top-center",
@@ -64,9 +64,9 @@ export const DeleteProductModal = ({ isDeleteModalOn, setIsDeleteModalOn, _id })
                 </svg>
               </div>
               <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                <h3 className="text-lg leading-6 font-medium text-gray-900">Confirm delete of product</h3>
+                <h3 className="text-lg leading-6 font-medium text-gray-900">Xác nhận xóa sản phẩm</h3>
                 <div className="mt-2">
-                  <p className="text-sm leading-5 text-gray-500">Are you sure you want to delete this product?</p>
+                  <p className="text-sm leading-5 text-gray-500">Bạn có chắc chắn muốn xóa sản phẩm này?</p>
                 </div>
               </div>
             </div>
@@ -78,7 +78,7 @@ export const DeleteProductModal = ({ isDeleteModalOn, setIsDeleteModalOn, _id })
                 className="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-primaryColor text-base leading-6 font-medium text-white shadow-sm hover:bg-darkPrimaryColor focus:outline-none focus:border-primaryColor focus:shadow-outline-red transition ease-in-out duration-150 sm:text-sm sm:leading-5"
                 onClick={fetchDeleteProduct}
               >
-                Delete product
+                Xóa sản phẩm
               </button>
             </span>
             <span className="mt-3 flex w-full rounded-md shadow-sm sm:mt-0 sm:w-auto">
@@ -89,7 +89,7 @@ export const DeleteProductModal = ({ isDeleteModalOn, setIsDeleteModalOn, _id })
                   setIsDeleteModalOn(false);
                 }}
               >
-                Cancel
+                Hủy
               </button>
             </span>
           </div>

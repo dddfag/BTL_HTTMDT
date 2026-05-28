@@ -15,23 +15,23 @@ export const ContactUsPage = () => {
         <div className="flex gap-[4px] items-center text-4xl">
           <IoIosArrowBack />
           <li onClick={() => navigate("/")} className="hover:underline capitalize">
-            Home
+            Trang chủ
           </li>
           <IoIosArrowBack />
           <li onClick={() => navigate("/shop")} className="hover:underline capitalize">
-            Shop
+            Cửa hàng
           </li>
           <IoIosArrowBack />
-          <span className=" capitalize">Contact us</span>
+          <span className=" capitalize">Liên hệ với chúng tôi</span>
         </div>
       </div>
 
       <section className="w-[100%] mt-20 mb-28 tablet:px-[6%] xl:px-[4%] px-[4%] lg:px-[2%] flex justify-center items-center ">
         <form action="" className="w-[92%] max-w-[360px] flex flex-col gap-4 " onSubmit={handleSubmit}>
-          <h2 className="text-[36px] text-center mb-8 lg:text-[44px]">Contact Us</h2>
+          <h2 className="text-[36px] text-center mb-8 lg:text-[44px]">Liên hệ</h2>
           <div>
             <label htmlFor="">
-              Name
+              Tên
               <input
                 type="text"
                 name=""
@@ -52,7 +52,7 @@ export const ContactUsPage = () => {
             </label>
           </div>
           <div>
-            <label htmlFor="">Message</label>
+            <label htmlFor="">Nội dung</label>
             <textarea
               className="border p-4 focus:outline-none mt-2 border-LightSecondaryColor rounded w-full"
               name=""
@@ -65,7 +65,7 @@ export const ContactUsPage = () => {
             type="submit"
             className="my-4 w-[100%] mx-auto block h-[52px] bg-primaryColor text-white cursor-none font-medium rounded"
           >
-            Send message
+            Gửi tin nhắn
           </button>
         </form>
       </section>

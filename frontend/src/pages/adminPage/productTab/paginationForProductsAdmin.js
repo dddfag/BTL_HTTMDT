@@ -13,7 +13,7 @@ export const PaginationSectionForProductsAdminPage = ({
 
   return (
     <div className="grid grid-cols-5 tablet:grid-cols-5 md:grid-cols-7 mr-[10%] mt-16 mb-24 md:mr-[12%] lg:mr-[15%] gap-4 lg:gap-6">
-      <h3 className="self-center">Page no : </h3>
+      <h3 className="self-center">Trang số: </h3>
       {pageNumbers.map((number, index) => {
         return (
           <li

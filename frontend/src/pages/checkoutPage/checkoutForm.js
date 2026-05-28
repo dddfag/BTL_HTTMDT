@@ -1,13 +1,70 @@
 import { useDispatch, useSelector } from "react-redux";
 import { setShippingMethod } from "../../features/authSlice";
 import { FullpageSpinnerLoader } from "../../components/loaders/spinnerIcon";
+import { VietQRPayment } from "../../components/vietQRPayment/VietQRPayment";
+import { useState, useEffect } from "react";
 
-export const CheckoutForm = ({ placeOrderFn, checkoutFormData, setCheckoutFormData }) => {
+export const CheckoutForm = ({ placeOrderFn, checkoutFormData, setCheckoutFormData, totalAmountToBePaid }) => {
   const {
     userData: { isLoading, email },
   } = useSelector((state) => state.userAuth);
 
   const dispatch = useDispatch();
+  const [paymentCompleted, setPaymentCompleted] = useState(false);
+  
+  // State for Vietnam address API (Hanoi only)
+  const [districts, setDistricts] = useState([]);
+  const [wards, setWards] = useState([]);
+  const [loadingDistricts, setLoadingDistricts] = useState(false);
+
+  // Load Hanoi districts when component mounts
+  useEffect(() => {
+    loadHanoiDistricts();
+  }, []);
+
+  // Load Hanoi districts from API (code 01)
+  const loadHanoiDistricts = async () => {
+    setLoadingDistricts(true);
+    try {
+      const response = await fetch("https://provinces.open-api.vn/api/p/01?depth=2");
+      const data = await response.json();
+      setDistricts(data.districts || []);
+    } catch (error) {
+      console.error("Error loading Hanoi districts:", error);
+    }
+    setLoadingDistricts(false);
+  };
+
+
+
+  // Handle district change
+  const handleDistrictChange = async (e) => {
+    const districtCode = e.target.value;
+    setCheckoutFormData((prevData) => ({
+      ...prevData,
+      district: districtCode,
+      ward: ""
+    }));
+    setWards([]);
+
+    if (districtCode) {
+      try {
+        const response = await fetch(`https://provinces.open-api.vn/api/d/${districtCode}?depth=2`);
+        const data = await response.json();
+        setWards(data.wards);
+      } catch (error) {
+        console.error("Error loading wards:", error);
+      }
+    }
+  };
+
+  // Handle ward change
+  const handleWardChange = (e) => {
+    setCheckoutFormData((prevData) => ({
+      ...prevData,
+      ward: e.target.value
+    }));
+  };
 
   return (
     <form
@@ -15,11 +72,11 @@ export const CheckoutForm = ({ placeOrderFn, checkoutFormData, setCheckoutFormDa
       onSubmit={placeOrderFn}
     >
       <article>
-        <h2 className="text-[24px] font-bold  mb-6">Contact Information</h2>
+        <h2 className="text-[24px] font-bold  mb-6">Thông tin liên hệ</h2>
         <section className="flex flex-col gap-4 w-[100%] mx-auto">
           <div className="w-[100%] ">
             <label htmlFor="" className="font-medium text-[18px]">
-              Username
+              Tên người dùng
             </label>{" "}
             <br />
             <input
@@ -39,7 +96,7 @@ export const CheckoutForm = ({ placeOrderFn, checkoutFormData, setCheckoutFormDa
           </div>
           <div className="w-[100%] ">
             <label htmlFor="" className="font-medium  text-[18px]">
-              Email address
+              Địa chỉ email
             </label>{" "}
             <br />
             <input
@@ -55,7 +112,7 @@ export const CheckoutForm = ({ placeOrderFn, checkoutFormData, setCheckoutFormDa
           </div>
           <div className="w-[100%] ">
             <label htmlFor="" className="font-medium text-[18px]">
-              Phone Number
+              Số điện thoại
             </label>{" "}
             <br />
             <input
@@ -64,7 +121,7 @@ export const CheckoutForm = ({ placeOrderFn, checkoutFormData, setCheckoutFormDa
               id=""
               required
               className="pl-3 w-[100%] h-[52px] focus-border-[1px] rounded focus:outline-none border-[1px] border-LightSecondaryColor"
-              placeholder="Enter your phone number"
+              placeholder="Nhập số điện thoại của bạn"
               value={checkoutFormData.phoneNumber}
               onChange={(e) => {
                 setCheckoutFormData((prevData) => {
@@ -76,11 +133,11 @@ export const CheckoutForm = ({ placeOrderFn, checkoutFormData, setCheckoutFormDa
         </section>
       </article>
       <article className="mt-6">
-        <h2 className="text-[24px] font-bold  mb-6">Billing Address</h2>
+        <h2 className="text-[24px] font-bold  mb-6">Thông tin thanh toán</h2>
         <section className="flex flex-col gap-4 w-[100%] mx-auto">
           <div className="w-[100%] ">
             <label htmlFor="" className="font-medium  text-[18px]">
-              Address
+              Địa chỉ
             </label>{" "}
             <br />
             <input
@@ -98,95 +155,55 @@ export const CheckoutForm = ({ placeOrderFn, checkoutFormData, setCheckoutFormDa
               }}
             />
           </div>
-          <div className="w-[100%] ">
+
+          <div className="w-[100%]">
             <label htmlFor="" className="font-medium  text-[18px]">
-              Country
+              Quận/Huyện
             </label>{" "}
             <br />
             <select
-              name=""
-              className="pl-3 w-[100%] h-[52px] focus-border-[1px] rounded focus:outline-none border-[1px] border-LightSecondaryColor"
-              id=""
               required
-              value={checkoutFormData.country}
-              onChange={(e) => {
-                setCheckoutFormData((prevData) => {
-                  return { ...prevData, country: e.target.value };
-                });
-              }}
+              disabled={districts.length === 0 || loadingDistricts}
+              className="pl-3 w-[100%] h-[52px] focus-border-[1px] rounded focus:outline-none border-[1px] border-LightSecondaryColor"
+              value={checkoutFormData.district || ""}
+              onChange={handleDistrictChange}
             >
-              <option value="" selected disabled className="value">
-                Select your country
+              <option value="" disabled>
+                Chọn quận/huyện
               </option>
-              <option value="United States">United States</option>
-              <option value="United Kingdom">United Kingdom</option>
-              <option value="Canada">Canada</option>
-              <option value="Australia">Australia</option>
-              <option value="Germany">Germany</option>
-              <option value="France">France</option>
-              <option value="Japan">Japan</option>
-              <option value="China">China</option>
-              <option value="India">India</option>
-              <option value="Brazil">Brazil</option>
-              <option value="Mexico">Mexico</option>
-              <option value="Nigeria">Nigeria</option>
-              <option value="South Africa">South Africa</option>
-              <option value="Singapore">Singapore</option>
-              <option value="South Korea">South Korea</option>
-              <option value="Italy">Italy</option>
-              <option value="Spain">Spain</option>
-              <option value="Netherlands">Netherlands</option>
-              <option value="Sweden">Sweden</option>
-              <option value="Switzerland">Switzerland</option>
-              <option value="Vietnam">Vietnam</option>
+              {districts.map((district) => (
+                <option key={district.code} value={district.code}>
+                  {district.name}
+                </option>
+              ))}
             </select>
           </div>
-          <div className="w-[100%] flex justify-between gap-[5%] items-center">
-            <div className="w-[100%]">
-              <label htmlFor="" className="font-medium  text-[18px]">
-                City
-              </label>{" "}
-              <br />
-              <input
-                type="text"
-                name=""
-                required
-                id=""
-                className="pl-3 w-[100%] h-[52px] focus-border-[1px] rounded focus:outline-none border-[1px] border-LightSecondaryColor"
-                placeholder="city"
-                value={checkoutFormData.city}
-                onChange={(e) => {
-                  setCheckoutFormData((prevData) => {
-                    return { ...prevData, city: e.target.value };
-                  });
-                }}
-              />
-            </div>
-            <div className="w-[100%]">
-              <label htmlFor="" className="font-medium  text-[18px]">
-                Postal code
-              </label>{" "}
-              <br />
-              <input
-                type="tel"
-                name=""
-                id=""
-                required
-                className="pl-3 w-[100%] h-[52px] focus-border-[1px] rounded focus:outline-none border-[1px] border-LightSecondaryColor"
-                placeholder="Zip code"
-                value={checkoutFormData.postalCode}
-                onChange={(e) => {
-                  setCheckoutFormData((prevData) => {
-                    return { ...prevData, postalCode: e.target.value };
-                  });
-                }}
-              />
-            </div>
+          <div className="w-[100%]">
+            <label htmlFor="" className="font-medium  text-[18px]">
+              Phường/Xã
+            </label>{" "}
+            <br />
+            <select
+              required
+              disabled={!checkoutFormData.district || wards.length === 0}
+              className="pl-3 w-[100%] h-[52px] focus-border-[1px] rounded focus:outline-none border-[1px] border-LightSecondaryColor"
+              value={checkoutFormData.ward || ""}
+              onChange={handleWardChange}
+            >
+              <option value="" disabled>
+                Chọn phường/xã
+              </option>
+              {wards.map((ward) => (
+                <option key={ward.code} value={ward.code}>
+                  {ward.name}
+                </option>
+              ))}
+            </select>
           </div>
         </section>
       </article>
       <article className="mt-6">
-        <h2 className="text-[24px] font-bold  mb-6">Shipping options</h2>
+        <h2 className="text-[24px] font-bold  mb-6">Tùy chọn vận chuyển</h2>
         <div
           className="flex flex-col gap-2"
           onChange={(e) => {
@@ -201,20 +218,20 @@ export const CheckoutForm = ({ placeOrderFn, checkoutFormData, setCheckoutFormDa
           {" "}
           <div className="flex gap-4 items-center">
             <input type="radio" name="shipping-rate" required value="standard" className="w-4 h-4" />{" "}
-            <span className=" text-lg">Standard Rate :&nbsp;$7.00 </span>
+            <span className=" text-lg">Tiêu chuẩn (1-3 ngày) :&nbsp;30.000 VND </span>
           </div>
           <div className="flex gap-4 items-center">
             <input type="radio" name="shipping-rate" required value="express" className="w-4 h-4" />{" "}
-            <span className=" text-lg">express Rate :&nbsp;$10.00 </span>
+            <span className=" text-lg">Vận chuyển nhanh (trong ngày) :&nbsp;80.000 VND </span>
           </div>
           <div className="flex gap-4 items-center">
             <input type="radio" name="shipping-rate" required value="free shipping" className="w-4 h-4" />{" "}
-            <span className=" text-lg">Free Shipping :&nbsp;$0 </span>
+            <span className=" text-lg">Vận chuyển hỏa tốc (1-3 giờ) :&nbsp;200.000 VND </span>
           </div>
         </div>
       </article>
       <article className="mt-6">
-        <h2 className="text-[24px] font-bold  mb-6">Payment method</h2>
+        <h2 className="text-[24px] font-bold  mb-6">Phương thức thanh toán</h2>
         <div
           className="flex flex-col gap-2"
           onChange={(e) => {
@@ -222,24 +239,38 @@ export const CheckoutForm = ({ placeOrderFn, checkoutFormData, setCheckoutFormDa
               setCheckoutFormData((prevData) => {
                 return { ...prevData, paymentMethod: e.target.value };
               });
+              setPaymentCompleted(false); // Reset when changing payment method
             }
           }}
         >
           <div className="flex gap-4 items-center">
             <input type="radio" name="payment-method" required value="cash" className="w-4 h-4" /> 
-            <span className="text-lg">Cash on Delivery (COD)</span>
+            <span className="text-lg">Thanh toán khi nhận (COD)</span>
           </div>
           <div className="flex gap-4 items-center">
-            <input type="radio" name="payment-method" required value="online" className="w-4 h-4" /> 
-            <span className="text-lg">Online Payment</span>
+            <input type="radio" name="payment-method" required value="vietqr" className="w-4 h-4" /> 
+            <span className="text-lg">Thanh toán VietQR (Quét mã QR)</span>
           </div>
         </div>
+
+        {/* VietQR Payment Component */}
+        {checkoutFormData.paymentMethod === "vietqr" && (
+          <div className="mt-4">
+            <VietQRPayment 
+              totalAmount={totalAmountToBePaid}
+              orderId={`ORD-${Date.now()}`}
+              email={email}
+              onPaymentComplete={() => setPaymentCompleted(true)}
+            />
+          </div>
+        )}
       </article>
       <button
         type="submit"
-        className="my-12 w-[100%] mx-auto block h-[52px] bg-primaryColor text-white font-medium rounded"
+        disabled={checkoutFormData.paymentMethod === "vietqr" && !paymentCompleted}
+        className="my-12 w-[100%] mx-auto block h-[52px] bg-primaryColor text-white font-medium rounded disabled:bg-gray-400 disabled:cursor-not-allowed"
       >
-        {isLoading ? <>Processing</> : "Place Order"}
+        {isLoading ? <>Xử lý</> : "Đặt đơn hàng"}
       </button>
 
       {isLoading && <FullpageSpinnerLoader />}

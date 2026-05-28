@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { handleCartModification } from "../../utils/handleCartModification";
 import { setCart } from "../../features/wishlistAndCartSlice";
 import { useNavigate } from "react-router-dom";
+import { formatPriceVND } from "../../utils/priceFormatter";
 
 export const SingleProductSection = ({ cartData, setIsCartSectionActive }) => {
   const { title, price, discountPercentValue, image, _id, stock } = cartData;
@@ -54,13 +55,13 @@ export const SingleProductSection = ({ cartData, setIsCartSectionActive }) => {
         <h2 className="  md:text-[18px] font-normal font-RobotoSlab capitalize">{title}</h2>
         {discountPercentValue > 0 ? (
           <div className="flex gap-3">
-            <h3 className="font-bold   md:text-[18px] tracking-wide">${discountedPrice.toFixed(2)}</h3>
+            <h3 className="font-bold   md:text-[18px] tracking-wide">{formatPriceVND(discountedPrice)}</h3>
             <h3 className="font-medium text-[14px] md:text-[16px]  tracking-wide text-lightBlack line-through">
-              ${price.toFixed(2)}
+              {formatPriceVND(price)}
             </h3>
           </div>
         ) : (
-          <h3 className="font-bold   md:text-[18px] tracking-wide ">${price.toFixed(2)}</h3>
+          <h3 className="font-bold   md:text-[18px] tracking-wide ">{formatPriceVND(price)}</h3>
         )}
         <span className="text-primaryColor font-RobotoCondensed tracking-[0.7px]">
           {stock < 0 ? "Out of stock" : <strong>{stock}</strong>}

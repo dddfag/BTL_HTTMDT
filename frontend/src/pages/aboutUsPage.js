@@ -13,28 +13,21 @@ export const AboutUsPage = () => {
         <div className="flex gap-[4px] items-center text-4xl">
           <IoIosArrowBack />
           <li onClick={() => navigate("/")} className="hover:underline capitalize">
-            Home
+            Trang chủ
           </li>
           <IoIosArrowBack />
           <li onClick={() => navigate("/shop")} className="hover:underline capitalize">
-            Shop
+            Cửa hàng
           </li>
           <IoIosArrowBack />
-          <span className=" capitalize">About</span>
+          <span className=" capitalize">Về chúng tôi</span>
         </div>
       </div>
       <section className="w-full  mt-4 tablet:px-[6%] xl:px-[4%] px-[4%] lg:px-[2%] flex flex-col md:flex-row gap-4  pt-20 pb-10">
         <div>
-          <h2 className="text-[28px] md:text-[32px] lg:text-[36px] mb-2">Our Story</h2>
+          <h2 className="text-[28px] md:text-[32px] lg:text-[36px] mb-2">Câu chuyện của chúng tôi</h2>
           <p className="leading-[180%] first-letter:float-left first-letter:mr-4 first-letter:text-7xl  first-letter:text-secondaryColor first-letter:font-bold">
-            Welcome to our e-furniture store,Auffur, where we offer a wide selection of high-quality, affordable
-            furniture for every room in your home. Our online platform allows you to shop for furniture at your
-            convenience, with easy-to-use filters that help you find the perfect piece for your style and budget. We
-            believe that everyone deserves to have a beautiful, comfortable home, and we're committed to making that a
-            reality for our customers. Our furniture is designed and crafted by experts using only the best components,
-            ensuring that you get furniture that is both stylish and durable. At Auffur, we're passionate about creating
-            beautiful spaces and providing excellent customer service, and we look forward to helping you create your
-            dream home.
+            Chào mừng đến cửa hàng nội thất trực tuyến của chúng tôi - Auffur, nơi chúng tôi cung cấp một lựa chọn rộng rãi nội thất chất lượng cao, gá cả phải chăn cho mọ̣ phòng trong nhà. Nền tảng trực tuyến của chúng tôi cho phép bạn mua sắm nội thất kẳ đời nó, với các bộ lọc dễ sử dụng giúp bạn tìm thấy mảnh ghép hoàn hảo cho phong cách và ngăn sách của bạn. Chúng tôi tin rằng mọi người đều xứng đáng có một ngôi nhà đẹp và thoải mái, và chúng tôi cam kết làm cho điều đó trở thành hiện thực cho khách hàng của chúng tôi. Nội thất của chúng tôi được thiết kế và chế tạo bởi các chún gia chệ dùng những thành phần tốt nhất, đảm bảo rằng bạn nhận được nội thất vởa sang trọng vừa bền. Tại Auffur, chúng tôi đam mê tạo ra các không gian đẹp và cung cấp dịch vụ khách hàng xuất sắc, và chúng tôi hé mong giúp bạn xây dựng ngôi nhà mơ ước của bạn.
           </p>
         </div>
         <div className=" flex justify-center items-center">

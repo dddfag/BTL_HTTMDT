@@ -28,7 +28,7 @@ const emailVerificationMessageDatas = (emailVerificationToken) => {
 
 //Register
 const registerUser = async (req, res) => {
-  const { username, password } = req.body;
+  const { fullName, phoneNumber, password } = req.body;
   const email = req.body?.email?.toLowerCase();
 
   let checkIfEmailExists = await User.findOne({ email });
@@ -41,8 +41,9 @@ const registerUser = async (req, res) => {
     throw new CustomErrorHandler(400, "Email host not supported");
   }
   await User.create({
+    fullName,
+    phoneNumber,
     email,
-    username,
     password: hashedpassword,
     verificationStatus: "pending",
     verificationToken: token,

@@ -25,7 +25,7 @@ export const Wishlist = ({ isWishlistActive, setIsWishlistActive }) => {
     >
       <section className="flex flex-col z-[2000] overflow-y-auto absolute top-0 bg-white items-start w-[98%] right-0 bottom-0 pt-4 pb-12 gap-7 tracking-[0.25px] text-lg h-[100%] md:max-w-[440px] lg:max-w-[480px]  tablet:max-w-[436px] ">
         <h1 className=" text-center mt-[0.5em] w-[100%] text-[1.75rem] border-b-[2px] border-LightSecondaryColor pb-4 font-bold">
-          My Wishlist
+          Danh sách ưa thích của tôi
         </h1>
         <IoCloseOutline
           className="absolute top-6 right-6 w-9 h-9 cursor-pointer"
@@ -38,7 +38,7 @@ export const Wishlist = ({ isWishlistActive, setIsWishlistActive }) => {
             {wishlist.length < 1 ? (
               <div className="flex justify-center items-center w-[100%] h-[50vh]">
                 {" "}
-                <h2 className="font-bold text-xl">Your wishlist is currently empty</h2>{" "}
+                <h2 className="font-bold text-xl">Danh sách ưa thích của bạn hiện đang trống</h2>{" "}
               </div>
             ) : (
               <div className="w-[100%] flex flex-col px-[5%] gap-4">

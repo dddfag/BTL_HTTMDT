@@ -1,4 +1,3 @@
-import { IoIosArrowBack } from "react-icons/io";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { useNavigate, Link, Navigate, useLocation } from "react-router-dom";
@@ -17,14 +16,24 @@ export const Index = () => {
   const [isAdmin, setIsAdmin] = useState(true);
   const [adminName, setAdminName] = useState("");
 
-  const [currentTabInAdminPage, setCurrentTabInAdminPage] = useState("dashboard");
+  const [currentTabInAdminPage, setCurrentTabInAdminPage] = useState("Bảng điều khiển");
 
   const { checkingAdminStatusLoader } = useSelector((state) => state.adminOperations);
 
   useEffect(() => {
     let tabPath = location.pathname.replace("/administrator/", "");
-    const tabName = tabPath.includes("management") ? tabPath : tabPath.replace("-", " ");
-
+    let tabName = tabPath.includes("management") ? tabPath : tabPath.replace("-", " ");
+    
+    // Convert English paths to Vietnamese
+    const pathTranslations = {
+      "dashboard": "Bảng điều khiển",
+      "revenues": "Doanh thu",
+      "product Management": "Quản lý sản phẩm",
+      "user Management": "Quản lý người dùng",
+      "order Management": "Quản lý đơn hàng"
+    };
+    
+    tabName = pathTranslations[tabName] || tabName;
     setCurrentTabInAdminPage(tabName);
   }, [location.pathname, location]);
 
@@ -39,7 +48,7 @@ export const Index = () => {
         const userData = JSON.parse(localStorage.getItem("UserData"));
         setAdminName(userData?.username || userData?.email || "Admin");
       } else {
-        navigate("/");
+        navigate("/login");
         setIsAdmin(false);
       }
     };
@@ -57,14 +66,14 @@ export const Index = () => {
     try {
       await localStorage.clear("userData");
 
-      toast("User has sucessfully logged out", {
+      toast("Người dùng đã đăng xuất thành công", {
         type: "success",
         autoClose: 3000,
         position: "top-center",
       });
       navigate("/login");
     } catch (error) {
-      toast("Something went wrong", {
+      toast("Có gì đó không đúng", {
         type: "error",
         autoClose: 3000,
         position: "top-center",
@@ -77,20 +86,6 @@ export const Index = () => {
   } else {
     return (
       <>
-        <div className="mt-12 tablet:px-[6%] w-[100%] h-auto bg-neutralColor text-secondaryColor xl:px-[4%] px-[4%] lg:px-[2%] py-6 flex items-center justify-between font-bold  font-RobotoCondensed lg:col-span-full lg:row-span-1">
-          <div className="flex gap-[4px] items-center text-4xl">
-            <IoIosArrowBack />
-            <li onClick={() => navigate("/")} className="hover:underline capitalize">
-              Home
-            </li>
-            <IoIosArrowBack />
-            <li onClick={() => navigate("/shop")} className="hover:underline capitalize">
-              Shop
-            </li>
-            <IoIosArrowBack />
-            <span>Admin</span>
-          </div>
-        </div>
         <div className="flex mx-[4%] justify-between items-start mt-16  md:mx-[4%] lg:mx-[2%] xl:mx-[4%] tablet:mx-[6%] ">
           <article className="w-[50%] tablet:w-[35%] lg:w-[30%] md:w-[30%] bg-[#ffffff] max-w-[264px] mb-16 flex-col flex gap-2">
             <div
@@ -107,16 +102,19 @@ export const Index = () => {
               onClick={handleAdminPageTabChange}
             >
               <Link to="dashboard">
-                <li data-tabpath="Dashboard">Dashboard</li>
+                <li data-tabpath="Bảng điều khiển">Bảng điều khiển</li>
               </Link>
               <Link to="revenues">
-                <li data-tabpath="Revenues">Revenues</li>
+                <li data-tabpath="Doanh thu">Doanh thu</li>
               </Link>
               <Link to="product-Management">
-                <li data-tabpath="Product management">Product management</li>
+                <li data-tabpath="Quản lý sản phẩm">Quản lý sản phẩm</li>
               </Link>
               <Link to="user-Management">
-                <li data-tabpath="Users management">Users management</li>
+                <li data-tabpath="Quản lý người dùng">Quản lý người dùng</li>
+              </Link>
+              <Link to="order-Management">
+                <li data-tabpath="Quản lý đơn hàng">Quản lý đơn hàng</li>
               </Link>
             </div>
           </article>
@@ -124,7 +122,7 @@ export const Index = () => {
             className="text-center w-[100px] h-9  hover:opacity-100 bg-lighterPrimaryColor text-[hsl(37,98%,53%)] cursor-pointer shadow-[0px_3px_8px_0px_rgba(0,0,0,0.1)]  rounded-md flex items-center justify-center"
             onClick={logoutBtnClick}
           >
-            <span>logout</span> &nbsp; &nbsp; <BiLogOut className="w-6 h-6 stroke-primaryColor" />
+            <span>Đăng xuất</span> &nbsp; &nbsp; <BiLogOut className="w-6 h-6 stroke-primaryColor" />
           </div>
         </div>
         {/* // nested routes jsx */}

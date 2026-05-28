@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { formatPriceVND } from "../../utils/priceFormatter";
 import {
   LineChart,
   Line,
@@ -21,7 +22,6 @@ import { MdTrendingUp, MdShoppingCart, MdLocalShipping, MdPayment } from "react-
 const RevenueManagement = () => {
   const [dashboardData, setDashboardData] = useState(null);
   const [trendsData, setTrendsData] = useState([]);
-  const [productRevenueData, setProductRevenueData] = useState([]);
   const [paymentMethodData, setPaymentMethodData] = useState([]);
   const [salesReport, setSalesReport] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -41,16 +41,15 @@ const RevenueManagement = () => {
       const LoginToken = JSON.parse(localStorage.getItem("UserData"))?.loginToken || "";
       
       if (!LoginToken) {
-        toast.error("Admin token not found. Please login again.");
+        toast.error("Token quản trị viên không được tìm thấy. Vui lòng đăng nhập lại.");
         return;
       }
 
       const headers = { Authorization: `Bearer ${LoginToken}` };
 
-      const [dashboard, trends, products, payment, report] = await Promise.all([
+      const [dashboard, trends, payment, report] = await Promise.all([
         axios.get("http://localhost:5000/api/v1/revenue/dashboard", { headers }),
         axios.get(`http://localhost:5000/api/v1/revenue/trends?period=${period}`, { headers }),
-        axios.get("http://localhost:5000/api/v1/revenue/products", { headers }),
         axios.get("http://localhost:5000/api/v1/revenue/payment-methods", { headers }),
         axios.get(`http://localhost:5000/api/v1/revenue/report?status=${filterStatus}&limit=10`, {
           headers,
@@ -59,11 +58,10 @@ const RevenueManagement = () => {
 
       setDashboardData(dashboard.data);
       setTrendsData(trends.data);
-      setProductRevenueData(products.data);
       setPaymentMethodData(payment.data);
       setSalesReport(report.data.orders);
     } catch (error) {
-      toast.error("Failed to fetch revenue data");
+      toast.error("Không thể tải dữ liệu doanh thu");
       console.error(error);
     } finally {
       setLoading(false);
@@ -77,7 +75,7 @@ const RevenueManagement = () => {
           <div className="inline-block">
             <div className="w-16 h-16 border-4 border-primaryColor border-t-secondaryColor rounded-full animate-spin mb-4"></div>
           </div>
-          <p className="text-2xl font-RobotoSlab font-bold text-secondaryColor">Loading revenue data...</p>
+          <p className="text-2xl font-RobotoSlab font-bold text-secondaryColor">Đang tải dữ liệu doanh thu...</p>
         </div>
       </div>
     );
@@ -88,9 +86,9 @@ const RevenueManagement = () => {
       {/* Header Section */}
       <div className="mb-12">
         <h1 className="text-4xl md:text-5xl font-RobotoSlab font-bold text-secondaryColor mb-3">
-          Revenue Analytics
+          Phân tích doanh thu
         </h1>
-        <p className="text-lg text-gray-600 font-OpenSans">Comprehensive sales and revenue insights for your business</p>
+        <p className="text-lg text-gray-600 font-OpenSans">Thông tin chi tiết toàn diện về doanh số và doanh thu kinh doanh của bạn</p>
       </div>
 
       {/* Dashboard Metrics */}
@@ -98,37 +96,37 @@ const RevenueManagement = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-12">
           <MetricCard
             icon={<MdTrendingUp className="w-8 h-8" />}
-            title="Total Revenue"
-            value={`$${dashboardData.totalRevenue}`}
-            subtext="All time earnings"
+            title="Tổng doanh thu"
+            value={formatPriceVND(dashboardData.totalRevenue)}
+            subtext="Lợi nhuận suốt đời"
             gradient="from-blue-500 to-blue-600"
           />
           <MetricCard
             icon={<MdShoppingCart className="w-8 h-8" />}
-            title="Orders"
+            title="Đơn hàng"
             value={dashboardData.totalOrders}
-            subtext="Total placed"
+            subtext="Tổng cộng đặt"
             gradient="from-green-500 to-green-600"
           />
           <MetricCard
             icon={<MdPayment className="w-8 h-8" />}
-            title="Avg Order"
-            value={`$${dashboardData.averageOrderValue}`}
-            subtext="Per transaction"
+            title="Đơn hàng trung bình"
+            value={formatPriceVND(dashboardData.averageOrderValue)}
+            subtext="Trên mỗi giao dịch"
             gradient="from-primaryColor to-darkPrimaryColor"
           />
           <MetricCard
             icon={<MdLocalShipping className="w-8 h-8" />}
-            title="Delivered"
+            title="Đã giao"
             value={dashboardData.deliveredOrders}
-            subtext="Completed"
+            subtext="Hoàn thành"
             gradient="from-indigo-500 to-indigo-600"
           />
           <MetricCard
             icon={<MdPayment className="w-8 h-8" />}
-            title="Paid"
+            title="Đã thanh toán"
             value={dashboardData.paidOrders}
-            subtext="Payment received"
+            subtext="Thanh toán nhận được"
             gradient="from-yellow-500 to-yellow-600"
           />
         </div>
@@ -137,7 +135,7 @@ const RevenueManagement = () => {
       {/* Tab Navigation */}
       <div className="mb-8">
         <div className="flex gap-3 flex-wrap bg-white rounded-xl p-2 shadow-lg border border-neutralColor">
-          {["overview", "trends", "products", "payment", "report"].map((tab) => (
+          {["overview", "trends", "payment", "report"].map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
@@ -147,7 +145,10 @@ const RevenueManagement = () => {
                   : "bg-white text-secondaryColor hover:bg-neutralColor"
               }`}
             >
-              {tab.charAt(0).toUpperCase() + tab.slice(1)}
+              {tab === "overview" && "Tổng quan"}
+              {tab === "trends" && "Xu hướng"}
+              {tab === "payment" && "Thanh toán"}
+              {tab === "report" && "Báo cáo"}
             </button>
           ))}
         </div>
@@ -155,67 +156,101 @@ const RevenueManagement = () => {
 
       {/* Tab Content */}
       <div className="bg-white rounded-2xl shadow-2xl p-8 border border-neutralColor">
-        {/* Overview Tab */}
-        {activeTab === "overview" && dashboardData && (
-          <div>
-            <h2 className="text-2xl font-RobotoSlab font-bold text-secondaryColor mb-8">Dashboard Overview</h2>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {/* Payment Status */}
-              <div className="bg-gradient-to-br from-lightestPrimaryColor to-white p-6 rounded-xl border border-neutralColor">
-                <h3 className="text-xl font-RobotoCondensed font-bold mb-6 text-secondaryColor">Payment Status</h3>
-                <ResponsiveContainer width="100%" height={380}>
-                  <PieChart margin={{ top: 30, right: 30, bottom: 30, left: 30 }}>
-                    <Pie
-                      data={[
-                        { name: "Paid", value: dashboardData.paidOrders },
-                        { name: "Pending", value: dashboardData.pendingOrders },
-                        { name: "Cancelled", value: dashboardData.cancelledOrders },
-                      ]}
-                      cx="50%"
-                      cy="45%"
-                      labelLine={true}
-                      label={({ name, value }) => `${name}: ${value}`}
-                      outerRadius={60}
-                      fill="#8884d8"
-                      dataKey="value"
-                    >
-                      <Cell fill="#10b981" />
-                      <Cell fill="#f59e0b" />
-                      <Cell fill="#ef4444" />
-                    </Pie>
-                    <Tooltip formatter={(value) => [value, "Orders"]} />
-                  </PieChart>
-                </ResponsiveContainer>
-              </div>
+{/* Tab Content */}
+<div className="bg-white rounded-2xl shadow-2xl p-8 border border-neutralColor">
 
-              {/* Delivery Status */}
-              <div className="bg-gradient-to-br from-lightestSecondaryColor to-white p-6 rounded-xl border border-neutralColor">
-                <h3 className="text-xl font-RobotoCondensed font-bold mb-6 text-secondaryColor">Delivery Status</h3>
-                <ResponsiveContainer width="100%" height={380}>
-                  <PieChart margin={{ top: 30, right: 30, bottom: 30, left: 30 }}>
-                    <Pie
-                      data={[
-                        { name: "Delivered", value: dashboardData.deliveredOrders },
-                        { name: "Pending", value: dashboardData.totalOrders - dashboardData.deliveredOrders },
-                      ]}
-                      cx="50%"
-                      cy="45%"
-                      labelLine={true}
-                      label={({ name, value }) => `${name}: ${value}`}
-                      outerRadius={60}
-                      fill="#8884d8"
-                      dataKey="value"
-                    >
-                      <Cell fill="#10b981" />
-                      <Cell fill="#94a3b8" />
-                    </Pie>
-                    <Tooltip formatter={(value) => [value, "Orders"]} />
-                  </PieChart>
-                </ResponsiveContainer>
-              </div>
-            </div>
-          </div>
-        )}
+  {/* Overview Tab */}
+  {activeTab === "overview" && dashboardData && (
+    <div>
+      <h2 className="text-2xl font-RobotoSlab font-bold text-secondaryColor mb-8">
+        Tổng quan dashboard
+      </h2>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+        {/* Payment Status */}
+        <div className="bg-gradient-to-br from-lightestPrimaryColor to-white p-6 rounded-xl border border-neutralColor">
+          <h3 className="text-xl font-RobotoCondensed font-bold mb-6 text-secondaryColor">
+            Trạng thái thanh toán
+          </h3>
+
+          <ResponsiveContainer width="100%" height={380}>
+            <PieChart margin={{ top: 30, right: 30, bottom: 30, left: 30 }}>
+              <Pie
+                data={[
+                  {
+                    name: "Đã thanh toán",
+                    value: dashboardData.paidOrders,
+                  },
+                  {
+                    name: "Chờ xử lý",
+                    value: dashboardData.pendingOrders,
+                  },
+                  {
+                    name: "Đã hủy",
+                    value: dashboardData.cancelledOrders,
+                  },
+                ]}
+                cx="50%"
+                cy="50%"
+                labelLine={true}
+                label={({ name, value }) => `${name}: ${value}`}
+                outerRadius={90}
+                fill="#8884d8"
+                dataKey="value"
+              >
+                <Cell fill="#10b981" />
+                <Cell fill="#f59e0b" />
+                <Cell fill="#ef4444" />
+              </Pie>
+
+              <Tooltip formatter={(value) => [value, "Đơn hàng"]} />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+
+        {/* Delivery Status */}
+        <div className="bg-gradient-to-br from-lightestSecondaryColor to-white p-6 rounded-xl border border-neutralColor">
+          <h3 className="text-xl font-RobotoCondensed font-bold mb-6 text-secondaryColor">
+            Trạng thái giao hàng
+          </h3>
+
+          <ResponsiveContainer width="100%" height={380}>
+            <PieChart margin={{ top: 30, right: 30, bottom: 30, left: 30 }}>
+              <Pie
+                data={[
+                  {
+                    name: "Đã giao",
+                    value: dashboardData.deliveredOrders,
+                  },
+                  {
+                    name: "Chờ xử lý",
+                    value:
+                      dashboardData.totalOrders -
+                      dashboardData.deliveredOrders,
+                  },
+                ]}
+                cx="50%"
+                cy="50%"
+                labelLine={true}
+                label={({ name, value }) => `${name}: ${value}`}
+                outerRadius={90}
+                fill="#8884d8"
+                dataKey="value"
+              >
+                <Cell fill="#10b981" />
+                <Cell fill="#94a3b8" />
+              </Pie>
+
+              <Tooltip formatter={(value) => [value, "Đơn hàng"]} />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+
+      </div>
+    </div>
+  )}
+</div>
 
         {/* Trends Tab */}
         {activeTab === "trends" && (
@@ -249,7 +284,12 @@ const RevenueManagement = () => {
                       border: "2px solid #fca311",
                       borderRadius: "8px"
                     }}
-                    formatter={(value) => `$${value.toFixed(2)}`} 
+                    formatter={(value, name) => {
+                      if (name === "Revenue") {
+                        return [formatPriceVND(value), name];
+                      }
+                      return [value, name];
+                    }}
                   />
                   <Legend />
                   <Line
@@ -263,64 +303,6 @@ const RevenueManagement = () => {
                   />
                 </LineChart>
               </ResponsiveContainer>
-            </div>
-          </div>
-        )}
-
-        {/* Products Tab */}
-        {activeTab === "products" && (
-          <div>
-            <h2 className="text-2xl font-RobotoSlab font-bold text-secondaryColor mb-8">Top Products by Revenue</h2>
-            
-            {/* Chart */}
-            <div className="bg-gradient-to-br from-lightestPrimaryColor to-lightestSecondaryColor p-6 rounded-xl border border-neutralColor mb-8">
-              <ResponsiveContainer width="100%" height={400}>
-                <BarChart data={productRevenueData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#e5e5e5" />
-                  <XAxis dataKey="productTitle" angle={-45} textAnchor="end" height={100} stroke="#14213d" />
-                  <YAxis stroke="#14213d" />
-                  <Tooltip 
-                    contentStyle={{ 
-                      backgroundColor: "#fff", 
-                      border: "2px solid #fca311",
-                      borderRadius: "8px"
-                    }}
-                    formatter={(value) => `$${value.toFixed(2)}`} 
-                  />
-                  <Legend />
-                  <Bar dataKey="revenue" fill="#fca311" name="Revenue" radius={[8, 8, 0, 0]} />
-                  <Bar dataKey="quantitySold" fill="#14213d" name="Qty" radius={[8, 8, 0, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-
-            {/* Table */}
-            <div className="overflow-x-auto">
-              <table className="w-full text-left">
-                <thead className="bg-gradient-to-r from-secondaryColor to-blue-900 text-white">
-                  <tr>
-                    <th className="px-6 py-4 font-RobotoCondensed font-bold">Product Name</th>
-                    <th className="px-6 py-4 font-RobotoCondensed font-bold text-right">Revenue</th>
-                    <th className="px-6 py-4 font-RobotoCondensed font-bold text-right">Qty Sold</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {productRevenueData.map((product, idx) => (
-                    <tr 
-                      key={idx} 
-                      className="border-b border-neutralColor hover:bg-lightestPrimaryColor transition-colors"
-                    >
-                      <td className="px-6 py-4 font-OpenSans text-secondaryColor">{product.productTitle}</td>
-                      <td className="px-6 py-4 font-RobotoCondensed font-bold text-right text-primaryColor">
-                        ${product.revenue.toFixed(2)}
-                      </td>
-                      <td className="px-6 py-4 font-RobotoCondensed font-bold text-right text-secondaryColor">
-                        {product.quantitySold}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
             </div>
           </div>
         )}
@@ -376,7 +358,7 @@ const RevenueManagement = () => {
                         {method.count}
                       </td>
                       <td className="px-6 py-4 font-RobotoCondensed font-bold text-right text-primaryColor">
-                        ${method.revenue.toFixed(2)}
+                        {formatPriceVND(method.revenue)}
                       </td>
                     </tr>
                   ))}
@@ -429,7 +411,7 @@ const RevenueManagement = () => {
                         </div>
                       </td>
                       <td className="px-6 py-4 font-RobotoCondensed font-bold text-right text-primaryColor">
-                        ${order.totalAmount}
+                        {formatPriceVND(order.totalAmount)}
                       </td>
                       <td className="px-6 py-4">
                         <span

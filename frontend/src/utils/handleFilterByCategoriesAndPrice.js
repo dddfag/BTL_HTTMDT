@@ -7,14 +7,24 @@ export const priceRangeFn = (productsDataParams, priceRange) => {
   const priceRangeArr = priceRange.split("-");
 
   if (priceRangeArr[1] === "") {
-    let filteredProductsPrice = productsDataParams.filter(
-      (productsData) => productsData.price >= Number(priceRangeArr[0])
-    );
+    let filteredProductsPrice = productsDataParams.filter((productsData) => {
+      // Calculate discounted price if discount exists
+      const finalPrice =
+        productsData.discountPercentValue > 0
+          ? productsData.price - (productsData.price * productsData.discountPercentValue) / 100
+          : productsData.price;
+      return finalPrice >= Number(priceRangeArr[0]);
+    });
     return filteredProductsPrice;
   } else {
-    let filteredProductsPrice = productsDataParams.filter(
-      (productsData) => Number(priceRangeArr[0]) <= productsData.price && productsData.price <= Number(priceRangeArr[1])
-    );
+    let filteredProductsPrice = productsDataParams.filter((productsData) => {
+      // Calculate discounted price if discount exists
+      const finalPrice =
+        productsData.discountPercentValue > 0
+          ? productsData.price - (productsData.price * productsData.discountPercentValue) / 100
+          : productsData.price;
+      return Number(priceRangeArr[0]) <= finalPrice && finalPrice <= Number(priceRangeArr[1]);
+    });
 
     return filteredProductsPrice;
   }

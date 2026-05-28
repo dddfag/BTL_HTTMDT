@@ -63,19 +63,19 @@ export const AddRating = ({ productId, onRatingAdded }) => {
   if (!username || !email) {
     return (
       <div className="mt-8 p-6 bg-blue-50 rounded-lg border border-blue-200">
-        <p className="text-blue-800">Please log in to leave a review</p>
+        <p className="text-blue-800">Hãy đăng nhập để có thể đánh giá sản phẩm</p>
       </div>
     );
   }
 
   return (
     <div className="mt-8 p-6 bg-white rounded-lg border border-gray-200">
-      <h3 className="font-bold text-[20px] tracking-[0.5px] mb-6">Leave a Rating</h3>
+      <h3 className="font-bold text-[20px] tracking-[0.5px] mb-6">Đánh giá sản phẩm</h3>
 
       <form onSubmit={handleSubmitRating}>
         {/* Star Rating */}
         <div className="mb-6">
-          <label className="font-semibold block mb-3">Your Rating</label>
+          <label className="font-semibold block mb-3">Đánh giá của bạn</label>
           <div className="flex gap-3">
             {Array.from({ length: 5 }).map((_, i) => (
               <button
@@ -100,11 +100,11 @@ export const AddRating = ({ productId, onRatingAdded }) => {
 
         {/* Comment */}
         <div className="mb-6">
-          <label className="font-semibold block mb-3">Your Comment (Optional)</label>
+          <label className="font-semibold block mb-3">Nhận xét của bạn (Tùy chọn)</label>
           <textarea
             value={comment}
             onChange={(e) => setComment(e.target.value)}
-            placeholder="Share your experience with this product..."
+            placeholder="Chia sẻ trải nghiệm của bạn với sản phẩm này..."
             maxLength="500"
             rows="4"
             className="w-full p-3 border-[1px] border-gray-300 rounded focus:outline-none focus:border-secondaryColor resize-none"
@@ -118,7 +118,7 @@ export const AddRating = ({ productId, onRatingAdded }) => {
           disabled={isSubmitting}
           className="w-full bg-primaryColor text-white font-semibold py-3 rounded hover:bg-opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
         >
-          {isSubmitting ? "Submitting..." : "Submit Rating"}
+          {isSubmitting ? "Submitting..." : "Gửi Đánh giá"}
         </button>
       </form>
     </div>

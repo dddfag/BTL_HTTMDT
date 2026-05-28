@@ -11,6 +11,7 @@ import { settingTotalProductPriceAndTotalQuantityValue } from "../../utils/setti
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
 import { primaryBtnVariant } from "../../utils/animation";
+import { formatPriceVND } from "../../utils/priceFormatter";
 
 export const Cart = ({ isCartSectionActive, setIsCartSectionActive }) => {
   const [shippingMethodValue, setShippingMethodValue] = useState(0);
@@ -65,7 +66,7 @@ export const Cart = ({ isCartSectionActive, setIsCartSectionActive }) => {
     >
       <section className="flex flex-col z-[2000] overflow-y-auto absolute top-0 bg-white items-start w-[98%] right-0 bottom-0 pt-4 pb-12 gap-7 tracking-[0.25px] text-lg h-[100%] lg:max-w-[520px] md:max-w-[480px] tablet:max-w-[480px]">
         <h1 className=" text-center mt-[0.5em] w-[100%] text-[1.75rem] border-b-[2px] border-LightSecondaryColor pb-4 font-bold">
-          My Cart
+          Giỏ hàng của tôi
         </h1>
         <IoCloseOutline
           className="absolute top-6 right-6 w-9 h-9 cursor-pointer"
@@ -89,22 +90,22 @@ export const Cart = ({ isCartSectionActive, setIsCartSectionActive }) => {
             )}
             <div className="pt-4 flex flex-col gap-4 border-t-[2px] border-LightSecondaryColor mt-20 w-[100%]">
               <div className="flex  items-center mx-[5%] justify-between  border-b-[1px] border-LightSecondaryColor pb-4">
-                <h2 className="font-normal text-[18px] md:text-[20px]">SubTotal</h2>
-                <span className="text-lg tracking-wide ">${totalProductPrice.toFixed(2)} USD</span>
+                <h2 className="font-normal text-[18px] md:text-[20px]">Tổng tiền hàng</h2>
+                <span className="text-lg tracking-wide ">{formatPriceVND(totalProductPrice)}</span>
               </div>
               <div className="flex  items-center mx-[5%] justify-between  border-b-[1px] border-LightSecondaryColor pb-4">
                 <div className="flex flex-col gap-2">
                   {" "}
-                  <h2 className="font-normal  md:text-[20px] text-[18px]">Shipping option</h2>
+                  <h2 className="font-normal  md:text-[20px] text-[18px]">Phí vận chuyển</h2>
                   <span className=" md:text-lg font-RobotoCondensed">{shippingMethod} rate</span>
                 </div>
 
-                <span className=" tracking-wide  md:text-lg">${shippingMethodValue * productTotalQuantity}.00 USD</span>
+                <span className=" tracking-wide  md:text-lg">{formatPriceVND(shippingMethodValue * productTotalQuantity)}</span>
               </div>
               <div className="flex  items-center mx-[5%] justify-between ">
-                <h2 className="font-bold text-[20px] md:text-[24px]">Total</h2>
+                <h2 className="font-bold text-[20px] md:text-[24px]">Tổng cộng</h2>
                 <h2 className="font-bold tracking-wide  text-[20px] md:text-[24px]">
-                  ${(totalProductPrice + productTotalQuantity * shippingMethodValue).toFixed(2)} USD
+                  {formatPriceVND(totalProductPrice + productTotalQuantity * shippingMethodValue)}
                 </h2>
               </div>
               <div className=" mx-[5%] mt-6">
@@ -115,7 +116,7 @@ export const Cart = ({ isCartSectionActive, setIsCartSectionActive }) => {
                   className="bg-primaryColor text-[#ffffff] w-[100%] h-[54px] rounded-md  "
                   onClick={proceedToCheckoutPage}
                 >
-                  Proceed to Checkout
+                  Tiếp tục thanh toán
                 </motion.button>
               </div>
             </div>

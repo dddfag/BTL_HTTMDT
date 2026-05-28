@@ -17,10 +17,10 @@ export const SingleProductTableCell = ({ products }) => {
     price: "",
     discountPercentValue: "",
     categories: {
-      "Featured Categories": [],
-      location: [],
-      features: [],
-      others: [],
+      "Danh mục nổi bật": [],
+      "Vị trí": [],
+      "Tính năng": [],
+      "Khác": [],
     },
     image: "",
   });

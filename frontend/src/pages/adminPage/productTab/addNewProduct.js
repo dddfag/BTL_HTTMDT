@@ -11,17 +11,17 @@ export const AddNewProduct = ({ isAddNewProductClicked, setIsAddNewProductClicke
   const [productPrice, setProductPrice] = useState("");
   const [productStock, setProductStock] = useState(0);
   const [categories, setCategories] = useState({
-    "Featured Categories": [],
-    location: [],
-    features: [],
-    others: [],
+    "Danh mục nổi bật": [],
+    "Vị trí": [],
+    "Tính năng": [],
+    "Khác": [],
   });
 
   const productCategories = {
-    "Featured Categories": ["featured", "first order deal", "discounts"],
-    location: ["kitchen", "dining", "bedroom", "living room", "office"],
-    features: ["chairs", "tables", "sets", "cupboards", "lighting", "sofa"],
-    others: ["kids"],
+    "Danh mục nổi bật": ["Nổi bật", "Uưu đãi đơn hàng đầu tiên", "Giảm giá"],
+    "Vị trí": ["Phòng bếp", "Phòng ăn", "Phòng ngủ", "Phòng khách", "Văn phòng"],
+    "Tính năng": ["Ghế", "Bàn", "Bộ", "Tủ", "Đèn", "Sofa"],
+    "Khác": ["Dành cho trẻ em"],
   };
 
   const imgRef = useRef(null);
@@ -62,7 +62,7 @@ export const AddNewProduct = ({ isAddNewProductClicked, setIsAddNewProductClicke
       stock: productStock,
       discountPercentValue: productDiscountPercentValue,
     };
-    const asyncCreateProductToastId = toast.loading("product data upload in progress");
+      const asyncCreateProductToastId = toast.loading("đang tải dữ liệu sản phẩm");
     try {
       const LoginToken = JSON.parse(localStorage.getItem("UserData")).loginToken || " ";
       const data = await axios.post(`${serverUrl}/api/v1/products`, formData, {
@@ -78,10 +78,10 @@ export const AddNewProduct = ({ isAddNewProductClicked, setIsAddNewProductClicke
       setProductTitle("");
       setProductDescription("");
       setCategories({
-        "Featured Categories": [],
-        location: [],
-        features: [],
-        others: [],
+        "Danh mục nổi bật": [],
+        "Vị trí": [],
+        "Tính năng": [],
+        "Khác": [],
       });
       setProductPrice("");
       setProductStock(0);
@@ -91,7 +91,7 @@ export const AddNewProduct = ({ isAddNewProductClicked, setIsAddNewProductClicke
         key.checked = false;
       }
       toast.update(asyncCreateProductToastId, {
-        render: "Product data has sucessfully been uploaded",
+        render: "Dữ liệu sản phẩm đã được tải lên thành công",
         type: "success",
         isLoading: false,
         autoClose: 3000,
@@ -104,7 +104,7 @@ export const AddNewProduct = ({ isAddNewProductClicked, setIsAddNewProductClicke
       }
 
       toast.update(asyncCreateProductToastId, {
-        render: `${errMessage} : Product data upload failed`,
+        render: `${errMessage} : Tải lên dữ liệu sản phẩm thất bại`,
         type: "error",
         isLoading: false,
         autoClose: 5000,
@@ -118,8 +118,8 @@ export const AddNewProduct = ({ isAddNewProductClicked, setIsAddNewProductClicke
     formData.append("image", imageFile);
 
     imgRef.current.nextElementSibling.style.display = "block";
-    imgRef.current.nextElementSibling.textContent = "uploading image ...";
-    const asyncImgUploadToastId = toast.loading("Pls wait, product image is currently being uploaded");
+    imgRef.current.nextElementSibling.textContent = "đang tải hình ảnh ...";
+    const asyncImgUploadToastId = toast.loading("Vui lòng chờ, hình ảnh sản phẩm đang được tải lên");
 
     try {
       const LoginToken = JSON.parse(localStorage.getItem("UserData")).loginToken || " ";
@@ -132,28 +132,28 @@ export const AddNewProduct = ({ isAddNewProductClicked, setIsAddNewProductClicke
       const { image } = data;
       setImgUrl(image.src);
       toast.update(asyncImgUploadToastId, {
-        render: "Product image has been successfully uploaded",
+        render: "Hình ảnh sản phẩm đã được tải lên thành công",
         type: "success",
         isLoading: false,
         autoClose: 3000,
       });
-      imgRef.current.nextElementSibling.textContent = "uploaded";
+      imgRef.current.nextElementSibling.textContent = "đã tải lên";
     } catch (error) {
       setImgUrl("");
 
       let errMessage;
-      if (!imageFile) errMessage = "No image selected";
+      if (!imageFile) errMessage = "Chưa chọn hình ảnh";
       else if (!error.response.data) errMessage = error.message;
       else {
         errMessage = error.response.data.message;
       }
       toast.update(asyncImgUploadToastId, {
-        render: `${errMessage} : Product image upload has failed`,
+        render: `${errMessage} : Tải lên hình ảnh sản phẩm thất bại`,
         type: "error",
         isLoading: false,
         autoClose: 5000,
       });
-      imgRef.current.nextElementSibling.textContent = "image upload failed";
+      imgRef.current.nextElementSibling.textContent = "tải lên hình ảnh thất bại";
     }
   };
 
@@ -167,14 +167,14 @@ export const AddNewProduct = ({ isAddNewProductClicked, setIsAddNewProductClicke
         <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
       </div>
       <div className="bg-white rounded-lg px-4 pt-5 pb-4 overflow-y-auto w-[99%] h-[98%] shadow-xl transform transition-all sm:max-w-lg sm:w-full">
-        <h2 className="text-xl sm:text-2xl font-bold text-center">Create a new product</h2>
+        <h2 className="text-xl sm:text-2xl font-bold text-center">Tạo sản phẩm mới</h2>
         <AiOutlineClose
           className="w-9 h-9 fill-primaryColor absolute right-5 cursor-pointer top-5"
           onClick={() => setIsAddNewProductClicked(false)}
         />
         <form action="" className="pt-8" onSubmit={createProduct}>
           <div className="mb-6">
-            <label className="block font-medium mb-2">Title</label>
+            <label className="block font-medium mb-2">Tiêu đề</label>
             <input
               type="text"
               className="w-full p-2 border border-gray-300 rounded-lg"
@@ -183,19 +183,19 @@ export const AddNewProduct = ({ isAddNewProductClicked, setIsAddNewProductClicke
             />
           </div>
           <div className="mb-6">
-            <label className="block font-medium mb-2">Description</label>
+            <label className="block font-medium mb-2">Mô tả</label>
             <textarea
               rows="3"
               className="w-full p-2 border border-gray-300 rounded-lg"
               value={productDescription}
               onChange={(e) => setProductDescription(e.currentTarget.value)}
-              placeholder="Enter product description"
+              placeholder="Nhập mô tả sản phẩm"
             />
           </div>
           <div className="mb-6 flex gap-[2%] items-end justify-between">
             <div className="w-1/3">
               <label htmlFor="price" className="font-bold">
-                Price
+                Giá tiền
               </label>
               <input
                 type="text"
@@ -207,7 +207,7 @@ export const AddNewProduct = ({ isAddNewProductClicked, setIsAddNewProductClicke
             </div>
             <div className="w-1/3">
               <label htmlFor="stock" className="font-bold">
-                Stock
+                Kho hàng
               </label>
               <input
                 type="number"
@@ -219,7 +219,7 @@ export const AddNewProduct = ({ isAddNewProductClicked, setIsAddNewProductClicke
             </div>
             <div className="w-1/3">
               <label htmlFor="discount" className="font-bold">
-                Discount(%)
+                Giảm giá (%)
               </label>
               <input
                 type="number"
@@ -231,7 +231,7 @@ export const AddNewProduct = ({ isAddNewProductClicked, setIsAddNewProductClicke
             </div>
           </div>
           <section onChange={handleCheckedCategories}>
-            <h2 className="text-lg font-bold mb-2">Select product categories</h2>
+            <h2 className="text-lg font-bold mb-2">Chọn danh mục sản phẩm</h2>
             <div className="mb-6">
               <div className="flex flex-wrap">
                 {Object.keys(productCategories).map((categoryTitle) => {
@@ -255,7 +255,7 @@ export const AddNewProduct = ({ isAddNewProductClicked, setIsAddNewProductClicke
             </div>
           </section>
           <div className="mb-6 relative">
-            <label className="block font-bold mb-2">Image</label>
+            <label className="block font-bold mb-2">Hình ảnh</label>
             <input
               type="file"
               ref={imgRef}
@@ -268,7 +268,7 @@ export const AddNewProduct = ({ isAddNewProductClicked, setIsAddNewProductClicke
           </div>
           <div className="flex items-center justify-end">
             <button type="submit" className="text-[#ffffff] bg-[#fca311]  p-2 rounded-lg">
-              Submit
+              Gửi
             </button>
           </div>
         </form>

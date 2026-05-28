@@ -15,7 +15,7 @@ import { toast } from "react-toastify";
 import { motion } from "framer-motion";
 
 const Index = () => {
-  const [sortingCriteria, setSortingCriteria] = useState("Default: Latest");
+  const [sortingCriteria, setSortingCriteria] = useState("Mặc định: Mới nhất");
   const [isFilterBySectionOpen, setIsFilterBySectionOpen] = useState(false);
   const [isFilterFnApplied, setIsFilterFnApplied] = useState(false);
 
@@ -67,10 +67,10 @@ const Index = () => {
         <div className="flex gap-[4px] items-center text-4xl">
           <IoIosArrowBack />
           <li onClick={() => navigate("/")} className="hover:underline capitalize">
-            Home
+            Trang chủ
           </li>
           <IoIosArrowBack />
-          <span>Shop</span>
+          <span>Cửa hàng</span>
           {selectedSubCategoryForFilter && (
             <>
               {" "}
@@ -93,27 +93,16 @@ const Index = () => {
       />
 
       <div className="lg:col-start-2  lg:col-end-5 lg:row-span-1 lg:ml-[8%] xl:ml-[10%] lg:mr-[3%] xl:mr-[5%]">
-        <h1 className="text-center font-bold text-[2.5rem] my-20">Shop</h1>
+        <h1 className="text-center font-bold text-[2.5rem] my-20">Cửa hàng</h1>
         {isLoading ? (
           <ProductLoader />
         ) : (
           <>
             <div className="lg:flex lg:justify-between lg:items-start">
-              {isFilterFnApplied && (selectedSubCategoryForFilter || priceRange) && (
-                <article className="w-[300px] tablet:w-[360px] max-w-[75%] md:w-[400px]  bg-[#ffffff] laptop:w-[17%]  ml-[4%] tablet:ml-[6%]  mb-12 flex-col flex gap-2 lg:ml-0 lg:order-2 lg:min-w-[400px]">
-                  <h3 className="text-lg font-bold ml-2"> Active Filters</h3>
-                  <div className="flex  justify-between h-14 bg-lightPrimaryColor text-white rounded-md shadow-[0px_3px_8px_0px_rgba(0,0,0,0.2)]  items-center px-[5%] font-medium text-base ">
-                    {selectedSubCategoryForFilter && <h3>Sub-Category : {selectedSubCategoryForFilter}</h3>}
-                    {priceRange && <h3>priceRange : {priceRange}($)</h3>}
-                  </div>
-                </article>
-              )}
               <article className="w-[65%] tablet:w-[40%] md:w-[30%] bg-[#ffffff] lg:order-1 laptop:w-[17%] lg:w-[30%] ml-[4%] tablet:ml-[6%]  mb-20 flex-col lg:ml-0 flex gap-2 lg:max-w-[262px]">
-                <h3 className="text-lg font-bold ml-2"> Sort by</h3>
+                <h3 className="text-lg font-bold ml-2"> Sắp xếp theo</h3>
                 <div
-                  className={`flex justify-between h-14 rounded-md  shadow-[0.5px_2px_32px_-2px_rgba(0,0,0,0.1)]  items-center px-[10%] cursor-pointer ${
-                    sortingCriteria !== "Default: Latest" && "bg-lightPrimaryColor text-white"
-                  }`}
+                  className="flex justify-between h-14 rounded-md  shadow-[0.5px_2px_32px_-2px_rgba(0,0,0,0.1)]  items-center px-[10%] cursor-pointer"
                   onClick={(e) => {
                     e.currentTarget.nextElementSibling.classList.toggle("active-sorting-lists");
                   }}
@@ -122,17 +111,15 @@ const Index = () => {
                   <RiArrowDropDownLine className="w-8 h-8 " />
                 </div>
                 <div
-                  className={`hidden flex-col bg-[#ffffff] rounded-md shadow-[0px_3px_8px_0px_rgba(0,0,0,0.2)]   py-4  gap-4 z-[200] px-[10%] sticky top-0 left-0 right-0 mb-[-16.5rem] lg:mb-[-15.5rem] transition duration-700 ease-in-out sorting-lists ${
-                    sortingCriteria !== "Default: Latest" && "bg-lightPrimaryColor text-white"
-                  }`}
+                  className="hidden flex-col bg-[#ffffff] rounded-md shadow-[0px_3px_8px_0px_rgba(0,0,0,0.2)]   py-4  gap-4 z-[200] px-[10%] sticky top-0 left-0 right-0 mb-[-16.5rem] lg:mb-[-15.5rem] transition duration-700 ease-in-out sorting-lists"
                   onClick={(e) => handleSortingCriteriaSelection(e)}
                 >
-                  <li data-list="sorting-criteria">Default: Latest</li>
-                  <li data-list="sorting-criteria">Name: A-Z</li>
-                  <li data-list="sorting-criteria">Name: Z-A</li>
-                  <li data-list="sorting-criteria">Price: low to high</li>
-                  <li data-list="sorting-criteria">Price: high to low</li>
-                  <li data-list="sorting-criteria">Oldest</li>
+                  <li data-list="sorting-criteria">Mặc định: Mới nhất</li>
+                  <li data-list="sorting-criteria">Tên: A-Z</li>
+                  <li data-list="sorting-criteria">Tên: Z-A</li>
+                  <li data-list="sorting-criteria">Giá: thấp đến cao</li>
+                  <li data-list="sorting-criteria">Giá: cao đến thấp</li>
+                  <li data-list="sorting-criteria">Cũ nhất</li>
                 </div>
               </article>
             </div>
@@ -152,12 +139,12 @@ const Index = () => {
                     onClick={() => setIsFilterBySectionOpen(true)}
                   />
                   <span className="absolute   -left-5 -top-2 -translate-y-full w-20 px-2 py-1 bg-gray-700 rounded-lg text-center text-white text-sm after:content-[''] after:absolute after:left-1/2 after:top-[100%] shadow-lg shadow-[rgba(0,0,0,0.2)]   after:border-8 after:border-x-transparent after:border-b-transparent after:border-t-gray-700">
-                    Filter Products
+                    Bộ lọc sản phẩm
                   </span>
                 </div>
               </>
             ) : (
-              <h1 className="text-center text-[28px] md-[32px] lg:text-[36px]">product match not found</h1>
+              <h1 className="text-center text-[28px] md-[32px] lg:text-[36px]">Không tìm thấy sản phẩm phù hợp</h1>
             )}
           </>
         )}

@@ -21,6 +21,7 @@ import { useLocation } from "react-router-dom";
 import { Dashboard } from "../pages/adminPage/dashboard";
 import { ProductManagement } from "../pages/adminPage/productTab/";
 import { UserManagement } from "../pages/adminPage/user";
+import { OrderManagement } from "../pages/adminPage/orders";
 import RevenueManagement from "../pages/adminPage/revenues";
 
 
@@ -55,6 +56,7 @@ const PagesRoute = ({ setIsCartSectionActive }) => {
           <Route path="revenues" element={<RevenueManagement />} />
           <Route path="product-Management" element={<ProductManagement />} />
           <Route path="user-Management" element={<UserManagement />} />
+          <Route path="order-Management" element={<OrderManagement />} />
         </Route>
 
         <Route path="*" element={<h2>path doesnt exist</h2>} />

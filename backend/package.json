@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "server": "nodemon app.js"
+    "server": "nodemon app.js",
+    "populate:orders": "node populateOrders.js"
   },
   "author": "Azeez umar faruk",
   "license": "ISC",

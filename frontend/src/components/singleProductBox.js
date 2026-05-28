@@ -12,6 +12,7 @@ import { primaryBtnVariant } from "../utils/animation";
 import { cartTextChangeVariant } from "../utils/animation";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
+import { formatPriceVND } from "../utils/priceFormatter";
 
 export const SingleProductBox = ({ productsData }) => {
   const { _id, title, price, image, discountPercentValue } = productsData;
@@ -83,25 +84,25 @@ export const SingleProductBox = ({ productsData }) => {
         >
           <BsEye />
           <Link to={`/product/${_id}`}>
-            <span> view details</span>
+            <span> Xem chi tiết</span>
           </Link>
         </motion.button>
       </div>
       <h4 className=" text-[20px] font-normal capitalize mt-4">{title}</h4>
       {discountPercentValue > 0 ? (
         <div className="flex gap-3 mt-[0.125rem] mb-4">
-          <h3 className="font-bold text-[20px] tracking-wide">${discountedPrice.toFixed(2)}</h3>
-          <h3 className="font-medium text-[18px]  tracking-wide text-lightBlack line-through">${price.toFixed(2)}</h3>
+          <h3 className="font-bold text-[20px] tracking-wide">{formatPriceVND(discountedPrice)}</h3>
+          <h3 className="font-medium text-[18px]  tracking-wide text-lightBlack line-through">{formatPriceVND(price)}</h3>
         </div>
       ) : (
-        <h3 className="font-bold  text-[20px] mt-[0.125rem] mb-4 tracking-wide ">${price.toFixed(2)}</h3>
+        <h3 className="font-bold  text-[20px] mt-[0.125rem] mb-4 tracking-wide ">{formatPriceVND(price)}</h3>
       )}
       <motion.button
         initial="initial"
         whileTap="click"
         variants={primaryBtnVariant}
         className="w-[100%] h-[52px] mx-auto rounded-md text-[#ffffff] bg-primaryColor "
-        onClick={() => handleCartModification(_id, dispatch, null, isProductInCart)}
+        onClick={() => handleCartModification(_id, dispatch, 1, isProductInCart, productsData)}
       >
         <motion.span
           className="w-[100%] h-[100%] flex items-center justify-center"
@@ -110,7 +111,7 @@ export const SingleProductBox = ({ productsData }) => {
           variants={cartTextChangeVariant}
         >
           {" "}
-          {isProductInCart ? "Remove from cart" : "Add to cart"}
+          {isProductInCart ? "Thêm thêm 1 vào giỏ" : "Thêm vào giỏ"}
         </motion.span>
       </motion.button>
     </motion.article>

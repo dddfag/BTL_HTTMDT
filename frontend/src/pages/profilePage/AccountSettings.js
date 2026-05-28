@@ -139,26 +139,26 @@ export const AccountSettings = () => {
 
   return (
     <div className="w-full mb-20">
-      <h2 className="text-3xl font-RobotoSlab font-bold text-secondaryColor mb-8">Account Settings</h2>
+      <h2 className="text-3xl font-RobotoSlab font-bold text-secondaryColor mb-8">Cài đặt tài khoản</h2>
 
       <div className="space-y-8 max-w-[700px]">
         {/* Contact Information Section */}
         <div className="bg-white rounded-lg shadow-md p-8 border border-neutralColor">
           <div className="flex justify-between items-center mb-6">
-            <h3 className="text-2xl font-RobotoSlab font-bold text-secondaryColor">Contact Information</h3>
+            <h3 className="text-2xl font-RobotoSlab font-bold text-secondaryColor">Thông tin liên hệ</h3>
             <button
               onClick={() => setIsEditing(!isEditing)}
               className="flex items-center gap-2 px-4 py-2 bg-lightPrimaryColor text-white rounded-lg hover:bg-primaryColor transition"
             >
               {isEditing ? <MdCancel className="w-5 h-5" /> : <MdEdit className="w-5 h-5" />}
-              {isEditing ? "Cancel" : "Edit"}
+              {isEditing ? "Hủy" : "Chỉnh sửa"}
             </button>
           </div>
 
           <div className="space-y-4">
             {/* Username */}
             <div>
-              <label className="block font-RobotoCondensed font-bold text-secondaryColor mb-2">Username</label>
+              <label className="block font-RobotoCondensed font-bold text-secondaryColor mb-2">Tên người dùng</label>
               <input
                 type="text"
                 name="username"
@@ -171,14 +171,14 @@ export const AccountSettings = () => {
 
             {/* Phone Number */}
             <div>
-              <label className="block font-RobotoCondensed font-bold text-secondaryColor mb-2">Phone Number</label>
+              <label className="block font-RobotoCondensed font-bold text-secondaryColor mb-2">Số điện thoại</label>
               <input
                 type="tel"
                 name="phoneNumber"
                 value={formData.phoneNumber}
                 onChange={handleInputChange}
                 disabled={!isEditing}
-                placeholder="Enter your phone number"
+                placeholder="Nhập số điện thoại của bạn"
                 className="w-full px-4 py-3 border-2 border-neutralColor rounded-lg font-OpenSans focus:outline-none focus:border-primaryColor disabled:bg-gray-100 disabled:cursor-not-allowed transition"
               />
             </div>
@@ -192,94 +192,7 @@ export const AccountSettings = () => {
                 disabled={loading}
                 className="w-full mt-6 bg-gradient-to-r from-primaryColor to-darkPrimaryColor text-white font-RobotoCondensed font-bold py-3 rounded-lg hover:shadow-lg transition disabled:opacity-50"
               >
-                {loading ? "Saving..." : "Save Changes"}
-              </motion.button>
-            )}
-          </div>
-        </div>
-
-        {/* Address Section */}
-        <div className="bg-white rounded-lg shadow-md p-8 border border-neutralColor">
-          <div className="flex justify-between items-center mb-6">
-            <h3 className="text-2xl font-RobotoSlab font-bold text-secondaryColor">Billing Address</h3>
-            {!isEditing && (
-              <button
-                onClick={() => setIsEditing(true)}
-                className="flex items-center gap-2 px-4 py-2 bg-lightPrimaryColor text-white rounded-lg hover:bg-primaryColor transition"
-              >
-                <MdEdit className="w-5 h-5" />
-                Edit
-              </button>
-            )}
-          </div>
-
-          <div className="space-y-4">
-            {/* Address */}
-            <div>
-              <label className="block font-RobotoCondensed font-bold text-secondaryColor mb-2">Address</label>
-              <input
-                type="text"
-                name="address"
-                value={formData.address}
-                onChange={handleInputChange}
-                disabled={!isEditing}
-                placeholder="Enter your address"
-                className="w-full px-4 py-3 border-2 border-neutralColor rounded-lg font-OpenSans focus:outline-none focus:border-primaryColor disabled:bg-gray-100 disabled:cursor-not-allowed transition"
-              />
-            </div>
-
-            {/* City & Country */}
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block font-RobotoCondensed font-bold text-secondaryColor mb-2">City</label>
-                <input
-                  type="text"
-                  name="city"
-                  value={formData.city}
-                  onChange={handleInputChange}
-                  disabled={!isEditing}
-                  placeholder="City"
-                  className="w-full px-4 py-3 border-2 border-neutralColor rounded-lg font-OpenSans focus:outline-none focus:border-primaryColor disabled:bg-gray-100 disabled:cursor-not-allowed transition"
-                />
-              </div>
-              <div>
-                <label className="block font-RobotoCondensed font-bold text-secondaryColor mb-2">Country</label>
-                <input
-                  type="text"
-                  name="country"
-                  value={formData.country}
-                  onChange={handleInputChange}
-                  disabled={!isEditing}
-                  placeholder="Country"
-                  className="w-full px-4 py-3 border-2 border-neutralColor rounded-lg font-OpenSans focus:outline-none focus:border-primaryColor disabled:bg-gray-100 disabled:cursor-not-allowed transition"
-                />
-              </div>
-            </div>
-
-            {/* Postal Code */}
-            <div>
-              <label className="block font-RobotoCondensed font-bold text-secondaryColor mb-2">Postal Code</label>
-              <input
-                type="text"
-                name="postalCode"
-                value={formData.postalCode}
-                onChange={handleInputChange}
-                disabled={!isEditing}
-                placeholder="Postal code"
-                className="w-full px-4 py-3 border-2 border-neutralColor rounded-lg font-OpenSans focus:outline-none focus:border-primaryColor disabled:bg-gray-100 disabled:cursor-not-allowed transition"
-              />
-            </div>
-
-            {isEditing && (
-              <motion.button
-                initial="initial"
-                whileTap="click"
-                variants={primaryBtnVariant}
-                onClick={updateUserSettings}
-                disabled={loading}
-                className="w-full mt-6 bg-gradient-to-r from-primaryColor to-darkPrimaryColor text-white font-RobotoCondensed font-bold py-3 rounded-lg hover:shadow-lg transition disabled:opacity-50"
-              >
-                {loading ? "Saving..." : "Save Address"}
+                {loading ? "Đang lưu..." : "Lưu thay đổi"}
               </motion.button>
             )}
           </div>
@@ -290,14 +203,14 @@ export const AccountSettings = () => {
           <div className="flex justify-between items-center mb-6">
             <h3 className="text-2xl font-RobotoSlab font-bold text-secondaryColor flex items-center gap-2">
               <MdLock className="w-6 h-6" />
-              Security
+              Bảo mật
             </h3>
             <button
               onClick={() => setIsChangingPassword(!isChangingPassword)}
               className="flex items-center gap-2 px-4 py-2 bg-lightPrimaryColor text-white rounded-lg hover:bg-primaryColor transition"
             >
               {isChangingPassword ? <MdCancel className="w-5 h-5" /> : <MdEdit className="w-5 h-5" />}
-              {isChangingPassword ? "Cancel" : "Change Password"}
+              {isChangingPassword ? "Hủy" : "Đổi mật khẩu"}
             </button>
           </div>
 
@@ -305,40 +218,40 @@ export const AccountSettings = () => {
             <div className="space-y-4">
               <div>
                 <label className="block font-RobotoCondensed font-bold text-secondaryColor mb-2">
-                  Current Password
+                  Mật khẩu hiện tại
                 </label>
                 <input
                   type="password"
                   name="currentPassword"
                   value={passwordData.currentPassword}
                   onChange={handlePasswordChange}
-                  placeholder="Enter current password"
+                  placeholder="Nhập mật khẩu hiện tại"
                   className="w-full px-4 py-3 border-2 border-neutralColor rounded-lg font-OpenSans focus:outline-none focus:border-primaryColor transition"
                 />
               </div>
 
               <div>
-                <label className="block font-RobotoCondensed font-bold text-secondaryColor mb-2">New Password</label>
+                <label className="block font-RobotoCondensed font-bold text-secondaryColor mb-2">Mật khẩu mới</label>
                 <input
                   type="password"
                   name="newPassword"
                   value={passwordData.newPassword}
                   onChange={handlePasswordChange}
-                  placeholder="Enter new password"
+                  placeholder="Nhập mật khẩu mới"
                   className="w-full px-4 py-3 border-2 border-neutralColor rounded-lg font-OpenSans focus:outline-none focus:border-primaryColor transition"
                 />
               </div>
 
               <div>
                 <label className="block font-RobotoCondensed font-bold text-secondaryColor mb-2">
-                  Confirm Password
+                  Xác nhận mật khẩu
                 </label>
                 <input
                   type="password"
                   name="confirmPassword"
                   value={passwordData.confirmPassword}
                   onChange={handlePasswordChange}
-                  placeholder="Confirm new password"
+                  placeholder="Xác nhận mật khẩu mới"
                   className="w-full px-4 py-3 border-2 border-neutralColor rounded-lg font-OpenSans focus:outline-none focus:border-primaryColor transition"
                 />
               </div>
@@ -351,7 +264,7 @@ export const AccountSettings = () => {
                 disabled={loading}
                 className="w-full mt-6 bg-gradient-to-r from-red-500 to-red-600 text-white font-RobotoCondensed font-bold py-3 rounded-lg hover:shadow-lg transition disabled:opacity-50"
               >
-                {loading ? "Updating..." : "Update Password"}
+                {loading ? "Đang cập nhật..." : "Cập nhật mật khẩu"}
               </motion.button>
             </div>
           )}

@@ -77,6 +77,11 @@ export const Header = ({ setIsWishlistActive, setIsCartSectionActive, isLargeScr
     navigate("/profilePage/accountInformation");
   };
 
+  // Hide header when on admin pages
+  if (location.pathname.includes("/administrator")) {
+    return null;
+  }
+
   return (
     <header className="h-[80px] sticky top-0 z-[1000] bg-[#ffffff]">
       <nav className="w-[100%] h-[100%] font-Roboto px-[4%] tablet:px-[6%] lg:px-[2%] xl:px-[4%] font-medium flex items-center justify-between shadow-[0px_0px_4px_0px_rgba(14,19,24,0.7)] ">
@@ -92,7 +97,7 @@ export const Header = ({ setIsWishlistActive, setIsCartSectionActive, isLargeScr
             <div className="relative p-3  bg-neutralColor rounded-[50%]">
               <BiSearch className="w-4 h-4 tablet:w-5 tablet:h-5 md:w-5 md:h-5  stroke-secondaryColor " />
             </div>
-            <span className="text-[18px] hidden cursor-pointer xl:block">&nbsp; Search</span>
+            <span className="text-[18px] hidden cursor-pointer xl:block">&nbsp; Tìm kiếm</span>
           </div>
           {isLargeScreen && (
             <div className="xl:flex xl:items-center cursor-pointer" onClick={handleMyAccountClick}>
@@ -102,7 +107,7 @@ export const Header = ({ setIsWishlistActive, setIsCartSectionActive, isLargeScr
               {isLoggedIn ? (
                 <span className="text-[18px] hidden cursor-pointer xl:block">&nbsp;{userData.username}</span>
               ) : (
-                <span className="text-[18px] hidden cursor-pointer xl:block">&nbsp;Login/Register</span>
+                <span className="text-[18px] hidden cursor-pointer xl:block">&nbsp;Đăng nhập/Đăng ký</span>
               )}
             </div>
           )}
@@ -113,7 +118,7 @@ export const Header = ({ setIsWishlistActive, setIsCartSectionActive, isLargeScr
                 {wishlist.length}
               </span>
             </div>
-            <span className="text-[18px] hidden cursor-pointer xl:block">&nbsp;Wishlist</span>
+            <span className="text-[18px] hidden cursor-pointer xl:block">&nbsp;Danh sách ưa thích</span>
           </div>
           <div className="xl:flex xl:items-center cursor-pointer" onClick={() => setIsCartSectionActive(true)}>
             <div className="relative p-3  bg-neutralColor rounded-[50%]">
@@ -127,7 +132,7 @@ export const Header = ({ setIsWishlistActive, setIsCartSectionActive, isLargeScr
                 {totalProductQuantityCart}
               </span>
             </div>
-            <span className="text-[18px] hidden cursor-pointer xl:block">&nbsp;Cart</span>
+            <span className="text-[18px] hidden cursor-pointer xl:block">&nbsp;Giỏ hàng</span>
           </div>
           <button
             className="p-3 bg-neutralColor md:hidden"
@@ -154,7 +159,7 @@ export const Header = ({ setIsWishlistActive, setIsCartSectionActive, isLargeScr
               className="w-[85%] text-[18px] pl-6 h-[100%] bg-neutralColor border-none outline-none"
               type="search"
               name=""
-              placeholder="search ..."
+              placeholder="tìm kiếm ..."
               id=""
             />
             <button

@@ -32,10 +32,10 @@ const productSchema = new mongoose.Schema(
       default: "",
     },
     categories: {
-      "Featured Categories": { type: [String], enums: ["featured", "first order deal", "discounts"] },
-      location: { type: [String], enums: ["kitchen", "dining", "bedroom", "living room", "office"] },
-      features: { type: [String], enums: ["chairs", "tables", "sets", "cupboards", "lighting", "sofa"] },
-      others: { type: [String], enums: ["kids"] },
+      "Danh mục nổi bật": [String],
+      "Vị trí": [String],
+      "Tính năng": [String],
+      "Khác": [String],
     },
     ratings: [
       {

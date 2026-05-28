@@ -13,26 +13,29 @@ export const PriceRange = ({ setCheckedPriceRangeDOM }) => {
 
   // LOOP THROUGH THE DESCENDANTS WHILE SKIPPING THE EVENT TARGET AND GET THE CHECKBOXES DOM
   const handleCheckedPrice = (e) => {
-    const descendants = e.currentTarget.getElementsByTagName("*");
-    for (let i = 0; i < descendants.length; i++) {
-      if (descendants[i] === e.target) {
-        continue;
+    // Get all price range checkboxes from the entire form
+    const allCheckboxes = document.querySelectorAll('input[name="priceRange"]');
+    
+    // Uncheck all checkboxes except the current one
+    allCheckboxes.forEach((checkbox) => {
+      if (checkbox !== e.target) {
+        checkbox.checked = false;
       }
-      descendants[i].checked = false;
-    }
+    });
 
     if (e.target.checked) {
       dispatch(setPriceRange(e.target.value));
       setCheckedPriceRangeDOM(e.target);
     } else {
-      dispatch(setPriceRange(e.target.value));
+      dispatch(setPriceRange(null));
+      setCheckedPriceRangeDOM(null);
     }
   };
 
   return (
     <article className="flex flex-col md:gap-5 tablet:gap-5 gap-4 w-[100%] mt-4">
       <div className="flex items-center justify-between">
-        <h3 className="text-lg tablet:text-xl font-bold">Price</h3>
+        <h3 className="text-lg tablet:text-xl font-bold">Giá</h3>
         {isPriceSectionOpen ? (
           <RiArrowDropUpLine
             className=" w-8 h-6 cursor-pointer"
@@ -46,7 +49,6 @@ export const PriceRange = ({ setCheckedPriceRangeDOM }) => {
         )}
       </div>
       <AnimatePresence>
-        {" "}
         {isPriceSectionOpen && (
           <motion.div
             initial={{ height: 0 }}
@@ -56,30 +58,30 @@ export const PriceRange = ({ setCheckedPriceRangeDOM }) => {
             onChange={(e) => handleCheckedPrice(e)}
           >
             <div className="flex gap-2 items-center">
-              <input type="checkbox" name="priceRange" value="1-10" id="1-10" />
-              <label htmlFor="1-10" className="flex gap-[1px] items-center cursor-pointer">
-                <span>$1</span>
-                <span>-</span> <span>$10</span>
+              <input type="checkbox" name="priceRange" value="0-100000" id="0-100000" />
+              <label htmlFor="0-100000" className="flex gap-[1px] items-center cursor-pointer">
+                <span>0₫</span>
+                <span>-</span> <span>100.000₫</span>
               </label>
             </div>
             <div className="flex gap-2 md:gap-3 tablet:gap-3 items-center">
-              <input type="checkbox" name="priceRange" value="11-100" id="11-100" />
-              <label htmlFor="11-100" className="flex gap-[1px] items-center cursor-pointer">
-                <span>$11</span>
-                <span>-</span> <span>$100</span>
+              <input type="checkbox" name="priceRange" value="100000-500000" id="100000-500000" />
+              <label htmlFor="100000-500000" className="flex gap-[1px] items-center cursor-pointer">
+                <span>100.000₫</span>
+                <span>-</span> <span>500.000₫</span>
               </label>
             </div>
             <div className="flex gap-2 md:gap-3 tablet:gap-3 items-center">
-              <input type="checkbox" name="priceRange" value="101-250" id="101-250" />
-              <label htmlFor="101-250" className="flex gap-[1px] items-center cursor-pointer">
-                <span>$101</span>
-                <span>-</span> <span>$250</span>
+              <input type="checkbox" name="priceRange" value="500000-1000000" id="500000-1000000" />
+              <label htmlFor="500000-1000000" className="flex gap-[1px] items-center cursor-pointer">
+                <span>500.000₫</span>
+                <span>-</span> <span>1.000.000₫</span>
               </label>
             </div>
             <div className="flex gap-2 md:gap-3 tablet:gap-3 items-center">
-              <input type="checkbox" name="priceRange" value="251-" id="251-" />
-              <label htmlFor="251-" className="flex gap-[1px] items-center cursor-pointer">
-                <span>$251</span>
+              <input type="checkbox" name="priceRange" value="1000000-" id="1000000-" />
+              <label htmlFor="1000000-" className="flex gap-[1px] items-center cursor-pointer">
+                <span>1.000.000₫</span>
                 <span>+</span>
               </label>
             </div>

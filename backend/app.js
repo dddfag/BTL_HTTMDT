@@ -12,6 +12,7 @@ const authRoute = require("./routes/authenticationRoute");
 const adminRoute = require("./routes/adminRoutes");
 const ordersRoute = require("./routes/ordersRoute");
 const revenueRoute = require("./routes/revenueRoute");
+const vietQRRoute = require("./routes/vietQRRoute");
 const { clearAdminJwt } = require("./controllers/admin");
 
 cloudinary.config({
@@ -44,6 +45,7 @@ app.use("/api/v1/auth", authRoute);
 app.use("/orders", ordersRoute);
 app.use("/api/v1/admin", adminRoute);
 app.use("/api/v1/revenue", revenueRoute);
+app.use("/api/v1/vietqr", vietQRRoute);
 app.use(errorHandler);
 app.use(pathNotFound);
 

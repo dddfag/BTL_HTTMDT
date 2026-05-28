@@ -17,10 +17,10 @@ export const EditAndupdateProductModal = ({
   const { _id, title, description, stock, price, discountPercentValue, categories, image } = productDetails;
 
   const productCategories = {
-    "Featured Categories": ["featured", "first order deal", "discounts"],
-    location: ["kitchen", "dining", "bedroom", "living room", "office"],
-    features: ["chairs", "table", "sets", "cupboards", "lighting", "sofa"],
-    others: ["kids"],
+    "Danh mục nổi bật": ["Nổi bật", "Uưu đãi đơn hàng đầu tiên", "Giảm giá"],
+    "Vị trí": ["Phòng bếp", "Phòng ăn", "Phòng ngủ", "Phòng khách", "Văn phòng"],
+    "Tính năng": ["Ghế", "Bàn", "Bộ", "Tủ", "Đèn", "Sofa"],
+    "Khác": ["Dành cho trẻ em"],
   };
 
   const imgRef = useRef(null);
@@ -67,7 +67,7 @@ export const EditAndupdateProductModal = ({
       discountPercentValue,
     };
 
-    const asyncCreateProductToastId = toast.loading("product data upload in progress");
+    const asyncCreateProductToastId = toast.loading("đang tải dữ liệu sản phẩm");
 
     try {
       const LoginToken = JSON.parse(localStorage.getItem("UserData"))?.loginToken || " ";
@@ -79,8 +79,26 @@ export const EditAndupdateProductModal = ({
         },
       });
 
-      //resetting  form datas to default after submits
-      imgRef.current.value = null;
+      // Close modal first
+      setIsEditAndUpdateModal(false);
+      setIsFetchingUpdatedDataLoading(false);
+
+      // Then reset form datas
+      try {
+        if (imgRef.current) {
+          imgRef.current.value = null;
+          if (imgRef.current.nextElementSibling) {
+            imgRef.current.nextElementSibling.style.display = "none";
+          }
+        }
+        
+        // Reset checkboxes
+        const checkboxes = e.target.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(checkbox => checkbox.checked = false);
+      } catch (err) {
+        console.error("Error resetting form:", err);
+      }
+
       setProductDetails({
         title: "",
         description: "",
@@ -88,29 +106,22 @@ export const EditAndupdateProductModal = ({
         price: "",
         discountPercentValue: "",
         categories: {
-          "Featured Categories": [],
-          location: [],
-          features: [],
-          others: [],
+          "Danh mục nổi bật": [],
+          "Vị trí": [],
+          "Tính năng": [],
+          "Khác": [],
         },
         image: "",
       });
 
-      imgRef.current.nextElementSibling.style.display = "none";
-      for (let key of e.target) {
-        key.checked = false;
-      }
-
       toast.update(asyncCreateProductToastId, {
-        render: "Product data has sucessfully been updated",
+        render: "Dữ liệu sản phẩm đã được cập nhật thành công",
         type: "success",
         isLoading: false,
         autoClose: 3000,
       });
-
-      setIsFetchingUpdatedDataLoading(false);
-      setIsEditAndUpdateModal(false);
     } catch (error) {
+      setIsFetchingUpdatedDataLoading(false);
       let errMessage;
 
       if (!error?.response?.data) errMessage = error?.message;
@@ -119,12 +130,11 @@ export const EditAndupdateProductModal = ({
       }
 
       toast.update(asyncCreateProductToastId, {
-        render: `${errMessage} : Product data update failed`,
+        render: `${errMessage} : Cập nhật dữ liệu sản phẩm thất bại`,
         type: "error",
         isLoading: false,
         autoClose: 5000,
       });
-      setIsFetchingUpdatedDataLoading(false);
     }
   };
 
@@ -134,8 +144,8 @@ export const EditAndupdateProductModal = ({
     formData.append("image", imageFile);
 
     imgRef.current.nextElementSibling.style.display = "block";
-    imgRef.current.nextElementSibling.textContent = "uploading image ...";
-    const asyncImgUploadToastId = toast.loading("Pls wait, product image is currently being uploaded");
+    imgRef.current.nextElementSibling.textContent = "đang tải hình ảnh ...";
+    const asyncImgUploadToastId = toast.loading("Vui lòng chờ, hình ảnh sản phẩm đang được tải lên");
 
     try {
       const LoginToken = JSON.parse(localStorage.getItem("UserData"))?.loginToken || " ";
@@ -150,29 +160,29 @@ export const EditAndupdateProductModal = ({
         return { ...prevData, image: image.src };
       });
       toast.update(asyncImgUploadToastId, {
-        render: "Product image has been successfully updated",
+        render: "Hình ảnh sản phẩm đã được cập nhật thành công",
         type: "success",
         isLoading: false,
         autoClose: 3000,
       });
-      imgRef.current.nextElementSibling.textContent = "uploaded";
+      imgRef.current.nextElementSibling.textContent = "đã tải lên";
     } catch (error) {
       setProductDetails((prevData) => {
         return { ...prevData, image: "" };
       });
       let errMessage;
-      if (!imageFile) errMessage = "No image selected";
+      if (!imageFile) errMessage = "Chưa chọn hình ảnh";
       else if (!error.response.data) errMessage = error.message;
       else {
         errMessage = error.response.data.message;
       }
       toast.update(asyncImgUploadToastId, {
-        render: `${errMessage} : Product image upload has failed`,
+        render: `${errMessage} : Tải lên hình ảnh sản phẩm thất bại`,
         type: "error",
         isLoading: false,
         autoClose: 5000,
       });
-      imgRef.current.nextElementSibling.textContent = "image upload failed";
+      imgRef.current.nextElementSibling.textContent = "tải lên hình ảnh thất bại";
     }
   };
 
@@ -189,14 +199,14 @@ export const EditAndupdateProductModal = ({
           <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
         </div>
         <div className="bg-white rounded-lg px-4 pt-5 pb-4 overflow-y-auto w-[99%] h-[98%] shadow-xl transform transition-all sm:max-w-lg sm:w-full">
-          <h2 className="text-xl sm:text-2xl font-bold text-center">Update existing product</h2>
+          <h2 className="text-xl sm:text-2xl font-bold text-center">Cập nhật sản phẩm hiện có</h2>
           <AiOutlineClose
             className="w-9 h-9 fill-primaryColor absolute right-5 cursor-pointer top-5"
             onClick={() => setIsEditAndUpdateModal(false)}
           />
           <form action="" className="pt-8" onSubmit={UpdateProduct}>
             <div className="mb-6">
-              <label className="block font-medium mb-2">Title</label>
+              <label className="block font-medium mb-2">Tiêu đề</label>
               <input
                 type="text"
                 className="w-full p-2 border border-gray-300 rounded-lg"
@@ -209,7 +219,7 @@ export const EditAndupdateProductModal = ({
               />
             </div>
             <div className="mb-6">
-              <label className="block font-medium mb-2">Description</label>
+              <label className="block font-medium mb-2">Mô tả</label>
               <textarea
                 rows="3"
                 className="w-full p-2 border border-gray-300 rounded-lg"
@@ -219,13 +229,13 @@ export const EditAndupdateProductModal = ({
                     return { ...prevData, description: e.target.value };
                   });
                 }}
-                placeholder="Enter product description"
+                placeholder="Nhập mô tả sản phẩm"
               />
             </div>
             <div className="mb-6 flex gap-[2%] items-end justify-between">
               <div className="w-1/3">
                 <label htmlFor="price" className="font-bold">
-                  Price
+                  Giá tiền
                 </label>
                 <input
                   type="text"
@@ -241,7 +251,7 @@ export const EditAndupdateProductModal = ({
               </div>
               <div className="w-1/3">
                 <label htmlFor="stock" className="font-bold">
-                  Stock
+                  Kho hàng
                 </label>
                 <input
                   type="number"

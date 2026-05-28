@@ -2,6 +2,7 @@ import { BiArrowToRight } from "react-icons/bi";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { MdEmail, MdPerson, MdCalendarToday, MdShoppingCart, MdAttachMoney, MdVerified, MdEdit } from "react-icons/md";
+import { formatPriceVND } from "../../utils/priceFormatter";
 
 export const AccountInformation = () => {
   const { userData } = useSelector((state) => state.userAuth);
@@ -29,7 +30,7 @@ export const AccountInformation = () => {
 
   return (
     <div className="w-full mb-20">
-      <h2 className="text-3xl font-RobotoSlab font-bold text-secondaryColor mb-8">Account Information</h2>
+      <h2 className="text-3xl font-RobotoSlab font-bold text-secondaryColor mb-8">Thông tin tài khoản</h2>
 
       {/* Admin Navigation */}
       {userData.adminStatus && (
@@ -37,7 +38,7 @@ export const AccountInformation = () => {
           className="mb-8 px-6 py-4 bg-gradient-to-r from-lightPrimaryColor to-primaryColor text-white rounded-lg shadow-lg hover:shadow-xl transition-shadow cursor-pointer flex items-center justify-between"
           onClick={() => navigate("/administrator/product-management")}
         >
-          <span className="font-RobotoCondensed font-bold text-lg">Proceed to Admin Dashboard</span>
+          <span className="font-RobotoCondensed font-bold text-lg">Đi đến bảng điều khiển quản trị</span>
           <BiArrowToRight className="w-6 h-6" />
         </div>
       )}
@@ -50,38 +51,47 @@ export const AccountInformation = () => {
       }`}>
         <MdVerified className={`w-6 h-6 ${userData.verificationStatus === "verified" ? "text-green-600" : "text-yellow-600"}`} />
         <span className={`font-RobotoCondensed font-bold ${userData.verificationStatus === "verified" ? "text-green-700" : "text-yellow-700"}`}>
-          Email Status: {userData.verificationStatus === "verified" ? "Verified" : "Pending Verification"}
+          Trạng thái email: {userData.verificationStatus === "verified" ? "Đã xác minh" : "Đang chờ xác minh"}
         </span>
       </div>
 
       {/* Personal Information Section */}
       <div className="bg-white rounded-lg shadow-md p-8 border border-neutralColor mb-8">
         <div className="flex justify-between items-center mb-6">
-          <h3 className="text-2xl font-RobotoSlab font-bold text-secondaryColor">Personal Information</h3>
+          <h3 className="text-2xl font-RobotoSlab font-bold text-secondaryColor">Thông tin cá nhân</h3>
           <button
             onClick={() => navigate("../accountSettings")}
             className="flex items-center gap-2 px-4 py-2 bg-lightPrimaryColor text-white rounded-lg hover:bg-primaryColor transition"
           >
             <MdEdit className="w-5 h-5" />
-            Edit Profile
+            Chỉnh sửa hồ sơ
           </button>
         </div>
 
         <div className="space-y-4">
+          {userData.fullName && (
+            <InfoCard
+              icon={MdPerson}
+              label="Họ tên"
+              value={userData.fullName}
+            />
+          )}
           <InfoCard
             icon={MdEmail}
-            label="Email Address"
+            label="Địa chỉ email"
             value={userData.email}
           />
-          <InfoCard
-            icon={MdPerson}
-            label="Username"
-            value={userData.username}
-          />
+          {userData.username && (
+            <InfoCard
+              icon={MdPerson}
+              label="Tên người dùng"
+              value={userData.username}
+            />
+          )}
           {userData.phoneNumber && (
             <InfoCard
               icon={MdPerson}
-              label="Phone Number"
+              label="Số điện thoại"
               value={userData.phoneNumber}
             />
           )}
@@ -90,24 +100,24 @@ export const AccountInformation = () => {
 
       {/* Customer Metrics Section */}
       <div className="bg-white rounded-lg shadow-md p-8 border border-neutralColor">
-        <h3 className="text-2xl font-RobotoSlab font-bold text-secondaryColor mb-6">Customer Metrics</h3>
+        <h3 className="text-2xl font-RobotoSlab font-bold text-secondaryColor mb-6">Thống kê khách hàng</h3>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           <InfoCard
             icon={MdCalendarToday}
-            label="Member Since"
+            label="Thành viên từ"
             value={yearJoined}
           />
           <InfoCard
             icon={MdShoppingCart}
-            label="Total Orders"
+            label="Tổng đơn hàng"
             value={completePurchases}
             highlight={completePurchases > 0}
           />
           <InfoCard
             icon={MdAttachMoney}
-            label="Total Spent"
-            value={`$${totalPurchaseValue}`}
+            label="Tổng chi tiêu"
+            value={formatPriceVND(totalPurchaseValue)}
             highlight={parseFloat(totalPurchaseValue) > 0}
           />
         </div>

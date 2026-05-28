@@ -101,6 +101,9 @@ const getRevenueByProduct = async (req, res) => {
     allUsers.forEach((user) => {
       user.orders.forEach((order) => {
         order.products.forEach((item) => {
+          // Skip products without valid productId
+          if (!item.productId) return;
+          
           const productId = item.productId?._id?.toString();
           const productTitle = item.productId?.title || "Unknown Product";
           const quantity = item.quantity || 0;
@@ -108,7 +111,7 @@ const getRevenueByProduct = async (req, res) => {
           // Calculate revenue for this order item
           let itemRevenue = 0;
           if (item.productId?.price) {
-            const discount = item.productId?.discountPercentage || 0;
+            const discount = item.productId?.discountPercentValue || 0;
             const discountedPrice = item.productId.price * (1 - discount / 100);
             itemRevenue = discountedPrice * quantity;
           }

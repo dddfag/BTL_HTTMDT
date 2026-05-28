@@ -14,22 +14,22 @@ export const NavTabs = ({ handleMyAccountClick }) => {
     >
       <li className="md:hover:bg-transparent hover:bg-neutralColor py-[6px] md:py-0">
         <Link to="/" className="px-[4%] w-[100%] h-[100%] inline-block  tablet:px-[6%]   md:px-0 ">
-          Home
+          Trang chủ
         </Link>
       </li>
       <li className="md:hover:bg-transparent hover:bg-neutralColor py-[6px] md:py-0">
         <Link to="/shop" className="px-[4%] w-[100%] h-[100%] inline-block  tablet:px-[6%]   md:px-0 ">
-          Shop
+          Cửa hàng
         </Link>
       </li>
       <li className=" py-[6px]  md:hover:bg-transparent hover:bg-neutralColor md:py-0">
         <Link to="/aboutUs" className="px-[4%] w-[100%] h-[100%] inline-block  tablet:px-[6%]   md:px-0 ">
-          About us
+          Về chúng tôi
         </Link>
       </li>
       <li className=" md:hover:bg-transparent md:py-0 py-[6px] hover:bg-neutralColor  ">
         <Link to="/contactUs" className="px-[4%] w-[100%] h-[100%] inline-block  tablet:px-[6%]   md:px-0 ">
-          Contact
+          Liên hệ
         </Link>
       </li>
 
@@ -40,7 +40,7 @@ export const NavTabs = ({ handleMyAccountClick }) => {
         onClick={handleMyAccountClick}
         className="w-[125px] h-[40px] mt-[8px] mx-[4%] md:mx-0  block md:hidden tablet:mx-[6%]   rounded-sm text-[#ffffff] bg-primaryColor"
       >
-        My Account
+        Tài khoản
       </motion.button>
     </motion.ul>
   );

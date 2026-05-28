@@ -15,7 +15,7 @@ export const HomepageCategoryProducts = ({ currentlyRequestedCategories }) => {
           to="/shop"
           className="text-lg lg:text-2xl text-primaryColor font-semibold hover:underline transition underline-offset-[6px] decoration-2"
         >
-          Shop for more
+          Mua sắm thêm
         </Link>
         <FaLongArrowAltRight className="w-6 lg:w-10 h-10 fill-primaryColor" />
       </div>

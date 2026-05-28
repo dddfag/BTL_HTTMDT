@@ -13,10 +13,10 @@ const Index = ({ setCheckedCategoryDOM }) => {
 
   // THE MAPPED JSON TO CREATE THE CHECKBOX AND CATEGORY UI
   const productCategories = {
-    "Featured Categories": ["featured", "first order deal", "discounts"],
-    location: ["kitchen", "dining", "bedroom", "living room", "office"],
-    features: ["chairs", "tables", "sets", "cupboards", "lighting", "sofa"],
-    others: ["kids"],
+    "Danh mục nổi bật": ["nổi bật", "ưu đãi đơn hàng đầu tiên", "giảm giá"],
+    "Vị trí": ["nhà bếp", "phòng ăn", "phòng ngủ", "phòng khách", "văn phòng"],
+    "Loại nội thất": ["ghế", "bàn", "bộ bàn ghế", "tủ", "đèn chiếu sáng", "sofa"],
+    "Khác": ["trẻ em"],
   };
 
   // LOOP THROUGH THE DESCENDANTS WHILE SKIPPING THE EVENT TARGET AND GET THE CHECKBOXES DOM
@@ -44,7 +44,7 @@ const Index = ({ setCheckedCategoryDOM }) => {
   return (
     <article className="flex flex-col gap-4 md:gap-5 tablet:gap-5">
       <div className="flex items-center justify-between">
-        <h3 className="text-xl font-bold">Categories</h3>
+        <h3 className="text-xl font-bold">Các thể loại</h3>
         {isCategorySectionOpen ? (
           <RiArrowDropUpLine
             className=" w-8 h-6 cursor-pointer"

@@ -4,7 +4,7 @@ const Product = require("../models/products");
 
 const postUserOrders = async (req, res) => {
   const { orderDetails } = req.body;
-  const { products } = orderDetails;
+  const { products, paymentMethod } = orderDetails;
 
   const email = req.body?.orderDetails?.email?.toLowerCase();
 
@@ -22,7 +22,13 @@ const postUserOrders = async (req, res) => {
   } else if (isOrderAboveLimit) {
     throw new CustomErrorHandler(403, "One or more product quantities selected is more than the amount in stock");
   } else {
-    await User.findOneAndUpdate({ email }, { $push: { orders: orderDetails } }, { new: true });
+    // All prices are now stored in VND in the database
+    const orderToSave = {
+      ...orderDetails,
+      createdAt: new Date(),
+    };
+
+    await User.findOneAndUpdate({ email }, { $push: { orders: orderToSave } }, { new: true });
 
     for (let key of products) {
       const findProducts = await Product.findById(key.productId);
@@ -31,7 +37,16 @@ const postUserOrders = async (req, res) => {
       await findProducts.updateOne({ stock: newStock });
     }
 
-    res.status(201).send("order sucessful");
+    res.status(201).json({
+      success: true,
+      message: "order sucessful",
+      data: {
+        orderId: orderToSave._id,
+        totalAmount: orderToSave.totalAmount,
+        currency: "VND",
+        paymentMethod: paymentMethod,
+      },
+    });
   }
 };
 

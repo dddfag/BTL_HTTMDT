@@ -3,9 +3,12 @@ const Schema = mongoose.Schema;
 
 const userSchema = mongoose.Schema(
   {
+    fullName: {
+      type: String,
+      required: [true, "please enter your full name"],
+    },
     username: {
       type: String,
-      required: [true, "please enter a username"],
     },
     email: {
       type: String,
@@ -15,6 +18,10 @@ const userSchema = mongoose.Schema(
     password: {
       type: String,
       required: [true, "please enter a password"],
+    },
+    phoneNumber: {
+      type: String,
+      required: [true, "please enter a phone number"],
     },
     adminStatus: {
       type: Boolean,
@@ -32,7 +39,6 @@ const userSchema = mongoose.Schema(
     country: String,
     postalCode: Number,
     city: String,
-    phoneNumber: String,
     shippingMethod: {
       type: String,
       default: "standard",
@@ -47,14 +53,17 @@ const userSchema = mongoose.Schema(
           },
         ],
         username: String,
+        fullName: String,
+        phoneNumber: String,
         shippingMethod: String,
-        paymentMethod: { type: String, enum: ["cash", "online"], default: "cash" },
+        paymentMethod: { type: String, enum: ["cash", "online", "vietqr"], default: "cash" },
         email: String,
         address: String,
+        district: String,
+        ward: String,
         country: String,
         postalCode: Number,
         city: String,
-        phoneNumber: String,
         totalAmount: Number,
         deliveryStatus: { type: String, enum: ["pending", "delivered", "cancelled"] },
         paymentStatus: { type: String, enum: ["pending", "paid", "cancelled"] },
@@ -63,7 +72,7 @@ const userSchema = mongoose.Schema(
     ],
   },
   {
-    timeStamps: true,
+    timestamps: true,
   }
 );
 

@@ -19,9 +19,9 @@ export const RemoveAdminModal = () => {
               </svg>
             </div>
             <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-              <h3 className="text-lg leading-6 font-medium text-gray-900">Confirm removal of admin</h3>
+              <h3 className="text-lg leading-6 font-medium text-gray-900">Xác nhận gỡ bỏ quản trị viên</h3>
               <div className="mt-2">
-                <p className="text-sm leading-5 text-gray-500">Are you sure you want to remove this admin?</p>
+                <p className="text-sm leading-5 text-gray-500">Bạn có chắc chắn muốn gỡ bỏ quản trị viên này?</p>
               </div>
               <div className="mt-4">
                 <form>
@@ -32,7 +32,7 @@ export const RemoveAdminModal = () => {
                         type="email"
                         required
                         className="form-input block w-full py-2 px-3 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5"
-                        placeholder="Admin Email"
+                        placeholder="Email quản trị viên"
                       />
                     </div>
                   </div>
@@ -47,7 +47,7 @@ export const RemoveAdminModal = () => {
               type="button"
               className="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-red-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-red-500 focus:outline-none focus:border-red-700 focus:shadow-outline-red transition ease-in-out duration-150 sm:text-sm sm:leading-5"
             >
-              Remove Admin
+              Gỡ bỏ quản trị viên
             </button>
           </span>
           <span className="mt-3 flex w-full rounded-md shadow-sm sm:mt-0 sm:w-auto">
@@ -55,7 +55,7 @@ export const RemoveAdminModal = () => {
               type="button"
               className="inline-flex justify-center w-full rounded-md border border-gray-300 px-4 py-2 bg-white text-base leading-6 font-medium text-gray-700 shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue transition ease-in-out duration-150 sm:text-sm sm:leading-5"
             >
-              Cancel
+              Hủy
             </button>
           </span>
         </div>

@@ -88,8 +88,8 @@ export const ProductManagement = () => {
 
       {/* Header */}
       <div className="mb-12">
-        <h1 className="text-4xl md:text-5xl font-RobotoSlab font-bold text-secondaryColor mb-3">Product Management</h1>
-        <p className="text-lg text-gray-600 font-OpenSans">Manage your product inventory and catalog</p>
+        <h1 className="text-4xl md:text-5xl font-RobotoSlab font-bold text-secondaryColor mb-3">Quản lý sản phẩm</h1>
+        <p className="text-lg text-gray-600 font-OpenSans">Quản lý danh mục và kho hàng sản phẩm của bạn</p>
       </div>
 
       {/* Add New Product Button */}
@@ -99,20 +99,20 @@ export const ProductManagement = () => {
           className="flex items-center gap-3 bg-gradient-to-r from-primaryColor to-darkPrimaryColor hover:shadow-lg text-white font-RobotoCondensed font-bold py-4 px-8 rounded-xl shadow-lg transition-all duration-300"
         >
           <IoAddOutline className="w-6 h-6" />
-          Add New Product
+          Thêm sản phẩm mới
         </button>
       </div>
 
       {/* Search Section */}
       <div className="bg-white rounded-2xl shadow-2xl p-8 border border-neutralColor mb-12">
-        <h2 className="text-2xl font-RobotoSlab font-bold text-secondaryColor mb-6">Search Products</h2>
+        <h2 className="text-2xl font-RobotoSlab font-bold text-secondaryColor mb-6">Tìm kiếm sản phẩm</h2>
         <div className="flex gap-3 flex-col sm:flex-row">
           <div className="relative flex-1">
             <IoSearchSharp className="absolute left-4 top-3.5 w-5 h-5 text-gray-400" />
             <input
               type="text"
               className="w-full pl-12 pr-4 py-3 border-2 border-neutralColor rounded-lg font-OpenSans text-secondaryColor placeholder-gray-400 focus:outline-none focus:border-primaryColor focus:ring-2 focus:ring-primaryColor focus:ring-opacity-50 transition-all"
-              placeholder="Search by product name..."
+              placeholder="Tìm kiếm theo tên sản phẩm..."
               value={searchParameters.searchedProductName}
               onChange={(e) => setSearchParameters({ ...searchParameters, searchedProductName: e.target.value })}
             />
@@ -121,7 +121,7 @@ export const ProductManagement = () => {
             onClick={() => searchProductFetch(searchParameters)}
             className="bg-gradient-to-r from-primaryColor to-darkPrimaryColor hover:shadow-lg text-white font-RobotoCondensed font-bold py-3 px-8 rounded-lg shadow-lg transition-all duration-300"
           >
-            Search
+            Tìm kiếm
           </button>
           {!closeSearchList && (
             <button
@@ -131,7 +131,7 @@ export const ProductManagement = () => {
               }}
               className="bg-gray-500 hover:bg-gray-600 text-white font-RobotoCondensed font-bold py-3 px-8 rounded-lg shadow-lg transition-all"
             >
-              Clear
+              Xóa bộ lọc
             </button>
           )}
         </div>
@@ -140,13 +140,13 @@ export const ProductManagement = () => {
       {/* Search Results */}
       {!closeSearchList && (
         <div className="bg-white rounded-2xl shadow-2xl p-8 border border-neutralColor mb-12">
-          <h2 className="text-2xl font-RobotoSlab font-bold text-secondaryColor mb-6">Search Results</h2>
+          <h2 className="text-2xl font-RobotoSlab font-bold text-secondaryColor mb-6">Kết quả tìm kiếm</h2>
           
           {isSearchLoading ? (
             <div className="flex justify-center py-12">
               <div className="text-center">
                 <div className="inline-block w-12 h-12 border-4 border-primaryColor border-t-secondaryColor rounded-full animate-spin mb-4"></div>
-                <p className="text-gray-600 font-OpenSans">Searching products...</p>
+                <p className="text-gray-600 font-OpenSans">Đang tìm kiếm sản phẩm...</p>
               </div>
             </div>
           ) : productsLength > 0 ? (

@@ -43,12 +43,12 @@ export const RatingsDisplay = ({ productId }) => {
   };
 
   if (isLoading) {
-    return <div className="text-center py-6">Loading ratings...</div>;
+    return <div className="text-center py-6">đang tải đánh giá...</div>;
   }
 
   return (
     <div className="mt-8 p-6 bg-gray-50 rounded-lg">
-      <h3 className="font-bold text-[20px] tracking-[0.5px] mb-4">Customer Ratings & Reviews</h3>
+      <h3 className="font-bold text-[20px] tracking-[0.5px] mb-4">Đánh giá và Nhận xét của Khách hàng</h3>
       
       {/* Average Rating Section */}
       <div className="mb-6 pb-6 border-b">
@@ -56,7 +56,7 @@ export const RatingsDisplay = ({ productId }) => {
           <div className="text-center">
             <div className="text-[32px] font-bold">{averageRating}</div>
             <div className="flex gap-1 justify-center">{renderStars(Math.round(averageRating))}</div>
-            <div className="text-sm text-gray-600 mt-2">({totalRatings} reviews)</div>
+            <div className="text-sm text-gray-600 mt-2">({totalRatings} các đánh giá)</div>
           </div>
         </div>
       </div>
@@ -72,7 +72,7 @@ export const RatingsDisplay = ({ productId }) => {
                   <div className="flex gap-1 mt-1">{renderStars(rating.rating)}</div>
                 </div>
                 <span className="text-sm text-gray-500">
-                  {rating.date ? new Date(rating.date).toLocaleDateString("en-US", {
+                  {rating.date ? new Date(rating.date).toLocaleDateString("vi-VN", {
                     year: "numeric",
                     month: "short",
                     day: "numeric",

@@ -41,7 +41,7 @@ export const LoginPage = () => {
       }
     } else if (e.target.dataset.nature === "resendEmailVerificationBtn") {
       if (emailInputDOM.value === "") {
-        toast("please,email field is required", {
+        toast("Vui lòng, trường email là bắt buộc", {
           type: "info",
           autoClose: 5000,
           position: "top-center",
@@ -79,7 +79,7 @@ export const LoginPage = () => {
   return (
     <section className="my-16 flex justify-center items-center max-w-[340px] text-base  w-[92%] mx-auto">
       <form className="flex flex-col gap-5 w-[100%] " onSubmit={onSubmit} onClick={onClickOfSomeBtn}>
-        <h1 className="text-4xl font-bold text-center font-RobotoCondensed">Welcome back</h1>
+        <h1 className="text-4xl font-bold text-center font-RobotoCondensed">Chào mừng quay lại</h1>
         <div className="w-100% mt-4">
           <div className="authPage-input-container mt-4 border-[1px] rounded relative border-secondaryColor focus-within:outline-none focus-within:border-primaryColor  w-[100%] h-[56px]">
             <input
@@ -99,10 +99,10 @@ export const LoginPage = () => {
               required
             />
             <label htmlFor="" className="absolute  top-[0.8rem] left-4 z-[-1]">
-              Email address
+              Địa chỉ email
             </label>
           </div>
-          <span className="text-[#fca311] font-RobotoCondensed hidden">Please enter a valid email address</span>
+          <span className="text-[#fca311] font-RobotoCondensed hidden">Vui lòng nhập địa chỉ email hợp lệ</span>
         </div>
         <div className="authPage-input-container border-[1px] rounded relative border-secondaryColor focus-within:outline-none focus-within:border-primaryColor  w-[100%] h-[56px]">
           <input
@@ -119,7 +119,7 @@ export const LoginPage = () => {
             }
           />
           <label htmlFor="" className=" absolute top-[0.8rem] left-4 z-[-1]">
-            Password
+            Mật khẩu
           </label>
           {isInputValueInPassword ? (
             <FaEye
@@ -139,7 +139,7 @@ export const LoginPage = () => {
             <span>Remember me</span>
           </div> */}
           <span data-nature="forgotPassswordBtn" className="text-primaryColor cursor-pointer">
-            Forgot Password?
+            Quên mật khẩu?
           </span>
         </div>
         <motion.button
@@ -156,20 +156,20 @@ export const LoginPage = () => {
             variants={cartTextChangeVariant}
           >
             {" "}
-            {isLoading ? "Logging in" : "Log in"}
+            {isLoading ? "Đang đăng nhập" : "Đăng nhập"}
           </motion.span>
         </motion.button>
         <span className=" text-center">
-          Dont have an account?{" "}
+          Chưa có tài khoản?{" "}
           <Link to="/register" className="text-primaryColor">
-            Register here
+            Đăng ký tại đây
           </Link>
         </span>
         <span
           className="text-center  hover:tailwindUnderlineDidntWork  text-secondaryColor font-medium cursor-pointer"
           data-nature="resendEmailVerificationBtn"
         >
-          Resend email verification
+          Gửi lại email xác thực
         </span>
         {isLoading && <FullpageSpinnerLoader />}
       </form>

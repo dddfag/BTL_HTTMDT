@@ -12,6 +12,7 @@ import { motion } from "framer-motion";
 import { primaryBtnVariant } from "../utils/animation";
 import { RatingsDisplay } from "../components/ratingsSection/ratingsDisplay";
 import { AddRating } from "../components/ratingsSection/addRating";
+import { formatPriceVND } from "../utils/priceFormatter";
 
 export const ProductDetailsPage = () => {
   const navigate = useNavigate();
@@ -20,7 +21,6 @@ export const ProductDetailsPage = () => {
   const { allProductsData, isLoading } = useSelector((state) => state.productsData);
   const { wishlist, cart } = useSelector((state) => state.wishlistAndCartSection);
 
-  const [productQuantityInCart, setProductQuantityInCart] = useState(1);
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [isProductInCart, setIsProductInCart] = useState(false);
   const [ratingsRefreshFlag, setRatingsRefreshFlag] = useState(0);
@@ -44,15 +44,9 @@ export const ProductDetailsPage = () => {
     if (categories[key].length > 0) subCategoriesArr.push(...categories[key]);
   }
 
-  const handleAddAndRemoveItemInCartFn = () => {
-    if (productQuantityInCart < 1) {
-      alert("product cant be less than 1");
-    } else if (!isProductInCart) {
-      handleCartModification(_id, dispatch, productQuantityInCart, isProductInCart);
-      setProductQuantityInCart(1);
-    } else {
-      handleCartModification(_id, dispatch, null, isProductInCart);
-    }
+  const handleAddToCartFn = () => {
+    // Always add 1 product, pass currentProduct directly to ensure it's found
+    handleCartModification(_id, dispatch, 1, isProductInCart, currentProduct);
   };
 
   // Checks if a the current product can be found in the wishlist and cart so as to be able to display the states in the ui
@@ -65,15 +59,9 @@ export const ProductDetailsPage = () => {
   }, [cart, _id]);
 
   const buyNowFn = () => {
-    if (productQuantityInCart < 1) {
-      alert("product cant be less than 1");
-    } else if (isProductInCart) {
-      handleCartModification(_id, dispatch, productQuantityInCart, isProductInCart);
-      navigate("/checkout");
-    } else {
-      handleCartModification(_id, dispatch, productQuantityInCart, isProductInCart);
-      navigate("/checkout");
-    }
+    // Add 1 product to cart and go to checkout
+    handleCartModification(_id, dispatch, 1, isProductInCart, currentProduct);
+    navigate("/checkout");
   };
 
   let discountedPrice = price - (price * discountPercentValue) / 100;
@@ -91,11 +79,11 @@ export const ProductDetailsPage = () => {
         <div className="flex gap-[4px] items-center text-4xl">
           <IoIosArrowBack />
           <li onClick={() => navigate("/")} className="hover:underline capitalize">
-            Home
+            Trang chủ
           </li>
           <IoIosArrowBack />
           <li onClick={() => navigate("/shop")} className="hover:underline capitalize">
-            Shop
+            Cửa hàng
           </li>
           <IoIosArrowBack />
           <span className=" capitalize">{title}</span>
@@ -123,57 +111,42 @@ export const ProductDetailsPage = () => {
           {discountPercentValue > 0 ? (
             <div className="flex gap-2">
               <h3 className="font-bold text-[24px] md:text-[28px]  tracking-[1px]">
-                ${discountedPrice.toFixed(2)} USD
+                {formatPriceVND(discountedPrice)}
               </h3>
-              <h3 className="line-through tracking-[1px] text-[20px] md:text-[24px] ">${price.toFixed(2)} USD</h3>
+              <h3 className="line-through tracking-[1px] text-[20px] md:text-[24px] ">{formatPriceVND(price)}</h3>
             </div>
           ) : (
-            <h3 className="font-bold text-[24px] md:text-[28px] tracking-[1px]">${price.toFixed(2)} USD</h3>
+            <h3 className="font-bold text-[24px] md:text-[28px] tracking-[1px]">{formatPriceVND(price)}</h3>
           )}
           <div className="flex gap-1 items-end">
-            <h3 className="font-bold tracking-[0.5px] text-[20px]">Availability :</h3>
+            <h3 className="font-bold tracking-[0.5px] text-[20px]">Tồn kho :</h3>
             <span className="text-primaryColor  tracking-[0.7px] text-[18px] ">
-              {stock < 0 ? "Out of stock" : <strong>{stock}</strong>}
-              {stock >= 0 && " left in stock"}
+              {stock < 0 ? "Hết hàng" : <strong>{stock}</strong>}
+              {stock >= 0 && " còn trong kho"}
             </span>
           </div>
           <div>
-            <h2 className="font-bold text-[20px] tracking-[0.5px]">Description</h2>
+            <h2 className="font-bold text-[20px] tracking-[0.5px]">Mô tả</h2>
             <p className="leading-[150%] tracking-[0.5px]">
               {description || "No description available for this product."}
             </p>
           </div>
-          <div className="flex items-center gap-4">
-            <h3 className="font-bold text-[20px] tracking-[0.5px]">Quantity :</h3>
-            <input
-              className="w-[20%] h-[40px] focus:outline-secondaryColor border-[1px] border-secondaryColor pl-3 rounded-sm text-secondaryColor "
-              type="number"
-              name=""
-              id=""
-              value={productQuantityInCart}
-              min="1"
-              onChange={(e) => {
-                const value = parseInt(e.target.value);
-                if (!isNaN(value) && value >= 1) {
-                  setProductQuantityInCart(value);
-                }
-              }}
-            />
-          </div>
+
           <div>
-            <h3 className="font-bold text-[20px] tracking-[0.5px]">Sub-Categories :</h3>
+            <h3 className="font-bold text-[20px] tracking-[0.5px]">Danh mục con :</h3>
             <div className="flex font-medium text-[18px]">
               {subCategoriesArr.map((category) => category).join(", ")}
             </div>
           </div>
           <div className="flex gap-6 flex-wrap">
             <motion.button
-              whileHover={{ backgroundColor: "#000000", borderWidth: "0px", color: "#ffffff" }}
-              transition={{ duration: 0.4 }}
-              className="text-secondaryColor basis-[100%] tablet:basis-[45%] md:basis-[35%] lg:basis-[40%] bg-transparent border-[1px] border-secondaryColor font-semibold w-[100%] h-[50px]"
-              onClick={handleAddAndRemoveItemInCartFn}
+              initial="initial"
+              whileTap="click"
+              variants={primaryBtnVariant}
+              className="text-white basis-[100%] tablet:basis-[45%] md:basis-[35%] lg:basis-[40%] bg-primaryColor font-semibold w-[100%] h-[50px]"
+              onClick={handleAddToCartFn}
             >
-              {isProductInCart ? "Remove from Cart" : "Add to Cart"}
+              Thêm vào giỏ hàng
             </motion.button>
 
             <motion.button
@@ -183,23 +156,23 @@ export const ProductDetailsPage = () => {
               className="text-white bg-primaryColor font-semibold  w-[100%] basis-[100%] lg:basis-[40%] tablet:basis-[45%] md:basis-[35%] h-[50px] block"
               onClick={buyNowFn}
             >
-              Buy Now
+              Mua ngay
             </motion.button>
           </div>
           <div className="flex-col flex gap-4">
-            <h3 className="font-bold text-[20px] tracking-[0.5px]">Shipping Options</h3>
+            <h3 className="font-bold text-[20px] tracking-[0.5px]">Tùy chọn vận chuyển</h3>
             <div className="flex flex-col gap-2">
               <p className=" leading-[150%]">
-                <span className="font-semibold text-[18px]">Standard shipping</span>
-                &nbsp; (Delivery in 7-10 working days) - takes $7.00 USD for each product
+                <span className="font-semibold text-[18px]">Vận chuyển tiêu chuẩn</span>
+                &nbsp; (Giao hàng trong 7-10 ngày làm việc) - tốn $7.00 USD cho mỗi sản phẩm
               </p>
               <p className=" leading-[150%]">
-                <span className="font-semibold text-[18px]">Express shipping</span>
-                &nbsp; (Delivery in 5-7working days) - takes $7.00 USD for each product
+                <span className="font-semibold text-[18px]">Vận chuyển nhanh</span>
+                &nbsp; (Giao hàng trong 5-7 ngày làm việc) - tốn $7.00 USD cho mỗi sản phẩm
               </p>
               <p className="leading-[150%]">
-                <span className="font-semibold text-[18px]">Free shipping</span>
-                &nbsp; (Delivery in 11-13 working days) - takes 0 USD for each product
+                <span className="font-semibold text-[18px]">Vận chuyển miễn phí</span>
+                &nbsp; (Giao hàng trong 11-13 ngày làm việc) - tốn 0 USD cho mỗi sản phẩm
               </p>
             </div>
           </div>

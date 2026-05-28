@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { formatPriceVND } from "../../utils/priceFormatter";
 import { 
-  MdVisibility, 
   MdShoppingCart, 
   MdAttachMoney, 
   MdPeople,
@@ -14,7 +14,6 @@ import {
 
 export const Dashboard = () => {
   const [dashboardData, setDashboardData] = useState({
-    totalVisits: 0,
     totalOrders: 0,
     totalSales: 0,
     totalUsers: 0,
@@ -51,7 +50,6 @@ export const Dashboard = () => {
 
       setRecentUsers(recent);
       setDashboardData({
-        totalVisits: 12345, // This would come from analytics in real app
         totalOrders: revenueRes.data.totalOrders,
         totalSales: parseFloat(revenueRes.data.totalRevenue),
         totalUsers: totalUsersCount,
@@ -60,7 +58,7 @@ export const Dashboard = () => {
         completedOrders: revenueRes.data.deliveredOrders,
       });
     } catch (error) {
-      toast.error("Failed to load dashboard data");
+      toast.error("Không thể tải dữ liệu bảng điều khiển");
       console.error(error);
     } finally {
       setLoading(false);
@@ -74,7 +72,7 @@ export const Dashboard = () => {
           <div className="inline-block">
             <div className="w-16 h-16 border-4 border-primaryColor border-t-secondaryColor rounded-full animate-spin mb-4"></div>
           </div>
-          <p className="text-2xl font-RobotoSlab font-bold text-secondaryColor">Loading dashboard...</p>
+          <p className="text-2xl font-RobotoSlab font-bold text-secondaryColor">Đang tải bảng điều khiển...</p>
         </div>
       </div>
     );
@@ -84,43 +82,32 @@ export const Dashboard = () => {
     <section className="w-full min-h-screen bg-gradient-to-br from-lightestPrimaryColor via-white to-lightestSecondaryColor px-4 md:px-8 py-8">
       {/* Header */}
       <div className="mb-12">
-        <h1 className="text-4xl md:text-5xl font-RobotoSlab font-bold text-secondaryColor mb-3">Dashboard</h1>
-        <p className="text-lg text-gray-600 font-OpenSans">Overview of your store's performance</p>
+        <h1 className="text-4xl md:text-5xl font-RobotoSlab font-bold text-secondaryColor mb-3">Bảng điều khiển</h1>
+        <p className="text-lg text-gray-600 font-OpenSans">Tổng quan về hiệu suất cửa hàng của bạn</p>
       </div>
 
       {/* Main Metrics Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-        <DashboardCard
-          icon={<MdVisibility className="w-8 h-8" />}
-          title="Total Visits"
-          value={dashboardData.totalVisits.toLocaleString()}
-          subtext="Lifetime visits"
-          gradient="from-blue-500 to-blue-600"
-          trend="+12%"
-        />
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12 lg:justify-center">
         <DashboardCard
           icon={<MdShoppingCart className="w-8 h-8" />}
-          title="Total Orders"
+          title="Tổng đơn hàng"
           value={dashboardData.totalOrders}
-          subtext="Orders placed"
+          subtext="Đơn hàng được đặt"
           gradient="from-green-500 to-green-600"
-          trend="+8%"
         />
         <DashboardCard
           icon={<MdAttachMoney className="w-8 h-8" />}
-          title="Total Sales"
-          value={`$${dashboardData.totalSales.toFixed(2)}`}
-          subtext="Revenue generated"
+          title="Tổng doanh số"
+          value={formatPriceVND(dashboardData.totalSales)}
+          subtext="Doanh thu phát sinh"
           gradient="from-primaryColor to-darkPrimaryColor"
-          trend="+23%"
         />
         <DashboardCard
           icon={<MdPeople className="w-8 h-8" />}
-          title="Total Users"
+          title="Tổng người dùng"
           value={dashboardData.totalUsers}
-          subtext="Registered users"
+          subtext="Người dùng đã đăng ký"
           gradient="from-purple-500 to-purple-600"
-          trend="+5%"
         />
       </div>
 
@@ -128,23 +115,23 @@ export const Dashboard = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
         <DashboardCard
           icon={<MdVerified className="w-8 h-8" />}
-          title="Verified Users"
+          title="Người dùng đã xác minh"
           value={dashboardData.verifiedUsers}
-          subtext={`${((dashboardData.verifiedUsers / dashboardData.totalUsers) * 100).toFixed(1)}% of total`}
+          subtext={`${((dashboardData.verifiedUsers / dashboardData.totalUsers) * 100).toFixed(1)}% trên tổng số`}
           gradient="from-emerald-500 to-emerald-600"
         />
         <DashboardCard
           icon={<MdPending className="w-8 h-8" />}
-          title="Pending Orders"
+          title="Đơn hàng chờ xử lý"
           value={dashboardData.pendingOrders}
-          subtext="Awaiting action"
+          subtext="Chờ xử lý"
           gradient="from-yellow-500 to-yellow-600"
         />
         <DashboardCard
           icon={<MdCheckCircle className="w-8 h-8" />}
-          title="Completed Orders"
+          title="Đơn hàng hoàn thành"
           value={dashboardData.completedOrders}
-          subtext="Successfully delivered"
+          subtext="Giao hàng thành công"
           gradient="from-teal-500 to-teal-600"
         />
       </div>
@@ -152,8 +139,8 @@ export const Dashboard = () => {
       {/* Recent Users Table */}
       <div className="bg-white rounded-2xl shadow-2xl p-8 border border-neutralColor">
         <div className="mb-8">
-          <h2 className="text-2xl font-RobotoSlab font-bold text-secondaryColor mb-2">Recent Users</h2>
-          <p className="text-gray-600 font-OpenSans">Latest registered users on your platform</p>
+          <h2 className="text-2xl font-RobotoSlab font-bold text-secondaryColor mb-2">Người dùng gần đây</h2>
+          <p className="text-gray-600 font-OpenSans">Người dùng đã đăng ký gần đây nhất trên nền tảng của bạn</p>
         </div>
 
         {recentUsers.length > 0 ? (
@@ -161,10 +148,10 @@ export const Dashboard = () => {
             <table className="w-full text-left">
               <thead className="bg-gradient-to-r from-secondaryColor to-blue-900 text-white">
                 <tr>
-                  <th className="px-6 py-4 font-RobotoCondensed font-bold">Username</th>
+                  <th className="px-6 py-4 font-RobotoCondensed font-bold">Tên người dùng</th>
                   <th className="px-6 py-4 font-RobotoCondensed font-bold">Email</th>
-                  <th className="px-6 py-4 font-RobotoCondensed font-bold">Status</th>
-                  <th className="px-6 py-4 font-RobotoCondensed font-bold">Joined</th>
+                  <th className="px-6 py-4 font-RobotoCondensed font-bold">Trạng thái</th>
+                  <th className="px-6 py-4 font-RobotoCondensed font-bold">Tham gia</th>
                 </tr>
               </thead>
               <tbody>
@@ -201,7 +188,7 @@ export const Dashboard = () => {
           </div>
         ) : (
           <div className="text-center py-12">
-            <p className="text-gray-500 font-OpenSans">No users found</p>
+            <p className="text-gray-500 font-OpenSans">Không tìm thấy người dùng</p>
           </div>
         )}
       </div>
@@ -209,20 +196,20 @@ export const Dashboard = () => {
       {/* Quick Actions */}
       <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
         <QuickActionCard
-          title="View Revenue"
-          description="Detailed sales analytics"
+          title="Xem doanh thu"
+          description="Phân tích doanh số chi tiết"
           link="/administrator/revenues"
           color="from-primaryColor to-darkPrimaryColor"
         />
         <QuickActionCard
-          title="Manage Products"
-          description="Add, edit, or remove items"
+          title="Quản lý sản phẩm"
+          description="Thêm, chỉnh sửa hoặc xóa mục"
           link="/administrator/product-Management"
           color="from-blue-500 to-blue-600"
         />
         <QuickActionCard
-          title="User Management"
-          description="Manage user accounts"
+          title="Quản lý người dùng"
+          description="Quản lý tài khoản người dùng"
           link="/administrator/user-Management"
           color="from-green-500 to-green-600"
         />

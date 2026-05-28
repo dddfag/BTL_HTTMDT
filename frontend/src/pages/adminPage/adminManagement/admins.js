@@ -7,11 +7,11 @@ export const AdminManagement = () => {
       <div className="container mx-auto">
         <div className="mb-16 gap-4 flex flex-wrap">
           <div className="flex  rounded-md justify-between bg-neutralColor w-full p-5">
-            <h2>Add New Admin</h2>
+            <h2>Thêm quản trị viên mới</h2>
             <IoAddOutline className="w-8 h-8 bg-primaryColor stroke-white" />
           </div>
           <div className="flex  rounded-md justify-between bg-neutralColor w-full p-5">
-            <h2>Remove admin status</h2>
+            <h2>Xóa quyền quản trị viên</h2>
             <IoRemoveOutline className="w-8 h-8 bg-primaryColor stroke-white" />
           </div>
         </div>
@@ -22,7 +22,7 @@ export const AdminManagement = () => {
               <p className="text-black text-2xl font-medium mt-4">auf</p>
               <p className=" text-base self-end text-primaryColor mt-4">Rank : Tier 1</p>
             </div>
-            <p className="mt-4 tablet:mt-0 font-medium">Last seen : 19/10/20022 19.67</p>
+            <p className="mt-4 tablet:mt-0 font-medium">Lần cuối: 19/10/20022 19.67</p>
           </div>
           <div className="w-full bg-neutralColor flex justify-between md:w-1/4  rounded-lg shadow-md p-5 flex-wrap gap-10">
             <div className="  ">
@@ -52,13 +52,13 @@ export const AdminManagement = () => {
       </div>
 
       <div className="my-20">
-        <h2 className="text-black text-xl font-medium mb-4">Admin action notifications</h2>
+        <h2 className="text-black text-xl font-medium mb-4">Thông báo thao tác quản trị viên</h2>
         <table className="w-full  text-left table-collapse">
           <thead>
             <tr>
               <th className="text-sm font-medium text-gray-600 p-2 bg-gray-100">Email</th>
-              <th className="text-sm font-medium text-gray-600 p-2 bg-gray-100">Action</th>
-              <th className="text-sm font-medium text-gray-600 p-2 bg-gray-100">Date</th>
+              <th className="text-sm font-medium text-gray-600 p-2 bg-gray-100">Thao tác</th>
+              <th className="text-sm font-medium text-gray-600 p-2 bg-gray-100">Ngày</th>
             </tr>
           </thead>
           <tbody>

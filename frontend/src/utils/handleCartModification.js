@@ -2,7 +2,7 @@ import { store } from "../store";
 import { setCart } from "../features/wishlistAndCartSlice";
 import { toast } from "react-toastify";
 
-export const handleCartModification = (_id, dispatch, productQuantity, isObjInCart) => {
+export const handleCartModification = (_id, dispatch, productQuantity, isObjInCart, productData = null) => {
   const { allProductsData } = store.getState().productsData;
   const { cart } = store.getState().wishlistAndCartSection;
 
@@ -37,7 +37,21 @@ export const handleCartModification = (_id, dispatch, productQuantity, isObjInCa
 
     case false:
       if (!productQuantity) {
-        let currentCartedProduct = allProductsData.find((productsData) => productsData._id === _id);
+        // Try to use provided productData first, then fall back to searching
+        let currentCartedProduct = productData || allProductsData.find((productsData) => productsData._id === _id);
+
+        // Final fallback: if not found anywhere, try to find in cart
+        if (!currentCartedProduct && cart.length > 0) {
+          currentCartedProduct = cart.find((productsData) => productsData._id === _id);
+        }
+
+        if (!currentCartedProduct) {
+          toast("Error: Product not found. Please refresh and try again.", {
+            type: "error",
+            autoClose: 2000,
+          });
+          return;
+        }
 
         currentCartedProduct = {
           ...currentCartedProduct,
@@ -50,7 +64,21 @@ export const handleCartModification = (_id, dispatch, productQuantity, isObjInCa
           autoClose: 2000,
         });
       } else if (productQuantity) {
-        let currentCartedProduct = allProductsData.find((productsData) => productsData._id === _id);
+        // Try to use provided productData first, then fall back to searching
+        let currentCartedProduct = productData || allProductsData.find((productsData) => productsData._id === _id);
+
+        // Final fallback: if not found anywhere, try to find in cart
+        if (!currentCartedProduct && cart.length > 0) {
+          currentCartedProduct = cart.find((productsData) => productsData._id === _id);
+        }
+
+        if (!currentCartedProduct) {
+          toast("Error: Product not found. Please refresh and try again.", {
+            type: "error",
+            autoClose: 2000,
+          });
+          return;
+        }
 
         currentCartedProduct = {
           ...currentCartedProduct,

@@ -7,10 +7,6 @@ import {
   MdPending,
   MdDelete,
   MdSearch,
-  MdEmail,
-  MdPhone,
-  MdLocationOn,
-  MdShoppingCart,
 } from "react-icons/md";
 
 export const UserManagement = () => {
@@ -20,7 +16,6 @@ export const UserManagement = () => {
   const [actionLoading, setActionLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
-  const [selectedUser, setSelectedUser] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
@@ -41,7 +36,7 @@ export const UserManagement = () => {
       const response = await axios.get("http://localhost:5000/api/v1/auth/getAllUsers", { headers });
       setUsers(response.data);
     } catch (error) {
-      toast.error("Failed to fetch users");
+      toast.error("Không thể tải người dùng");
       console.error(error);
     } finally {
       setLoading(false);
@@ -70,25 +65,24 @@ export const UserManagement = () => {
   };
 
   const deleteUser = async (userId, userEmail) => {
-    if (window.confirm(`Are you sure you want to delete user ${userEmail}?`)) {
+    if (window.confirm(`Bạn có chắc chắn muốn xóa người dùng ${userEmail}?`)) {
       try {
         const LoginToken = JSON.parse(localStorage.getItem("UserData"))?.loginToken || "";
         const headers = { Authorization: `Bearer ${LoginToken}` };
 
         await axios.delete(`http://localhost:5000/api/v1/auth/deleteUser?id=${userId}`, { headers });
         
-        toast.success("User deleted successfully");
+        toast.success("Người dùng đã được xóa thành công");
         setUsers(users.filter((u) => u._id !== userId));
-        setSelectedUser(null);
       } catch (error) {
-        toast.error("Failed to delete user");
+        toast.error("Không thể xóa người dùng");
         console.error(error);
       }
     }
   };
 
   const changeUserRoleToAdmin = async (userId, userEmail) => {
-    if (window.confirm(`Are you sure you want to make ${userEmail} an admin?`)) {
+    if (window.confirm(`Bạn có chắc chắn muốn nâng cấp ${userEmail} thành admin?`)) {
       try {
         setActionLoading(true);
         const LoginToken = JSON.parse(localStorage.getItem("UserData"))?.loginToken || "";
@@ -103,17 +97,14 @@ export const UserManagement = () => {
           { headers }
         );
 
-        toast.success("User promoted to admin successfully");
+        toast.success("Người dùng đã được nâng cấp thành admin thành công");
         // Update the users list
         const updatedUsers = users.map((u) =>
           u._id === userId ? { ...u, adminStatus: true } : u
         );
         setUsers(updatedUsers);
-        
-        // Update selected user
-        setSelectedUser((prev) => (prev ? { ...prev, adminStatus: true } : null));
       } catch (error) {
-        toast.error(error.response?.data?.message || "Failed to promote user to admin");
+        toast.error(error.response?.data?.message || "Không thể nâng cấp người dùng thành admin");
         console.error(error);
       } finally {
         setActionLoading(false);
@@ -122,7 +113,7 @@ export const UserManagement = () => {
   };
 
   const removeUserAdminRole = async (userId, userEmail) => {
-    if (window.confirm(`Are you sure you want to revoke admin status from ${userEmail}?`)) {
+    if (window.confirm(`Bạn có chắc chắn muốn hủy quyền admin từ ${userEmail}?`)) {
       try {
         setActionLoading(true);
         const LoginToken = JSON.parse(localStorage.getItem("UserData"))?.loginToken || "";
@@ -136,17 +127,14 @@ export const UserManagement = () => {
           }
         );
 
-        toast.success("Admin status removed successfully");
+        toast.success("Quyền admin đã bị xóa thành công");
         // Update the users list
         const updatedUsers = users.map((u) =>
           u._id === userId ? { ...u, adminStatus: false } : u
         );
         setUsers(updatedUsers);
-
-        // Update selected user
-        setSelectedUser((prev) => (prev ? { ...prev, adminStatus: false } : null));
       } catch (error) {
-        toast.error(error.response?.data?.message || "Failed to remove admin status");
+        toast.error(error.response?.data?.message || "Không thể xóa quyền admin");
         console.error(error);
       } finally {
         setActionLoading(false);
@@ -175,7 +163,7 @@ export const UserManagement = () => {
           <div className="inline-block">
             <div className="w-16 h-16 border-4 border-primaryColor border-t-secondaryColor rounded-full animate-spin mb-4"></div>
           </div>
-          <p className="text-2xl font-RobotoSlab font-bold text-secondaryColor">Loading users...</p>
+          <p className="text-2xl font-RobotoSlab font-bold text-secondaryColor">Đang tải người dùng...</p>
         </div>
       </div>
     );
@@ -185,33 +173,33 @@ export const UserManagement = () => {
     <section className="w-full min-h-screen bg-gradient-to-br from-lightestPrimaryColor via-white to-lightestSecondaryColor px-4 md:px-8 py-8">
       {/* Header */}
       <div className="mb-12">
-        <h1 className="text-4xl md:text-5xl font-RobotoSlab font-bold text-secondaryColor mb-3">User Management</h1>
-        <p className="text-lg text-gray-600 font-OpenSans">Manage and monitor user accounts</p>
+        <h1 className="text-4xl md:text-5xl font-RobotoSlab font-bold text-secondaryColor mb-3">Quản lý người dùng</h1>
+        <p className="text-lg text-gray-600 font-OpenSans">Quản lý và giám sát các tài khoản người dùng</p>
       </div>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
         <StatCard
           icon={<MdPeople className="w-8 h-8" />}
-          title="Total Users"
+          title="Tổng người dùng"
           value={stats.total}
           gradient="from-blue-500 to-blue-600"
         />
         <StatCard
           icon={<MdVerified className="w-8 h-8" />}
-          title="Verified"
+          title="Đã xác minh"
           value={stats.verified}
           gradient="from-green-500 to-green-600"
         />
         <StatCard
           icon={<MdPending className="w-8 h-8" />}
-          title="Pending"
+          title="Chờ xử lý"
           value={stats.pending}
           gradient="from-yellow-500 to-yellow-600"
         />
         <StatCard
           icon={<MdPeople className="w-8 h-8" />}
-          title="Admins"
+          title="Quản trị viên"
           value={stats.admin}
           gradient="from-purple-500 to-purple-600"
         />
@@ -223,13 +211,13 @@ export const UserManagement = () => {
           {/* Search */}
           <div>
             <label className="block text-sm font-RobotoCondensed font-bold text-secondaryColor mb-3">
-              Search Users
+              Tìm kiếm người dùng
             </label>
             <div className="relative">
               <MdSearch className="absolute left-4 top-3.5 w-5 h-5 text-gray-400" />
               <input
                 type="text"
-                placeholder="Search by name or email..."
+                placeholder="Tìm kiếm theo tên hoặc email..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full pl-12 pr-4 py-3 border-2 border-neutralColor rounded-lg font-OpenSans text-secondaryColor placeholder-gray-400 focus:outline-none focus:border-primaryColor focus:ring-2 focus:ring-primaryColor focus:ring-opacity-50 transition-all"
@@ -240,16 +228,16 @@ export const UserManagement = () => {
           {/* Filter */}
           <div>
             <label className="block text-sm font-RobotoCondensed font-bold text-secondaryColor mb-3">
-              Filter by Status
+              Lọc theo trạng thái
             </label>
             <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
               className="w-full px-4 py-3 border-2 border-neutralColor rounded-lg font-OpenSans text-secondaryColor focus:outline-none focus:border-primaryColor focus:ring-2 focus:ring-primaryColor focus:ring-opacity-50 transition-all"
             >
-              <option value="all">All Users</option>
-              <option value="verified">Verified Only</option>
-              <option value="pending">Pending Only</option>
+              <option value="all">Tất cả người dùng</option>
+              <option value="verified">Chỉ đã xác minh</option>
+              <option value="pending">Chỉ chờ xử lý</option>
             </select>
           </div>
         </div>
@@ -259,11 +247,11 @@ export const UserManagement = () => {
       <div className="bg-white rounded-2xl shadow-2xl p-8 border border-neutralColor">
         <div className="mb-8">
           <h2 className="text-2xl font-RobotoSlab font-bold text-secondaryColor mb-2">
-            Users ({filteredUsers.length})
+            Người dùng ({filteredUsers.length})
           </h2>
           <p className="text-gray-600 font-OpenSans">
-            Showing {indexOfFirstItem + 1}-{Math.min(indexOfLastItem, filteredUsers.length)} of{" "}
-            {filteredUsers.length} users
+            Hiển thị {indexOfFirstItem + 1}-{Math.min(indexOfLastItem, filteredUsers.length)} của{" "}
+            {filteredUsers.length} người dùng
           </p>
         </div>
 
@@ -273,20 +261,18 @@ export const UserManagement = () => {
               <table className="w-full text-left">
                 <thead className="bg-gradient-to-r from-secondaryColor to-blue-900 text-white">
                   <tr>
-                    <th className="px-6 py-4 font-RobotoCondensed font-bold">Username</th>
+                    <th className="px-6 py-4 font-RobotoCondensed font-bold">Tên người dùng</th>
                     <th className="px-6 py-4 font-RobotoCondensed font-bold">Email</th>
-                    <th className="px-6 py-4 font-RobotoCondensed font-bold">Status</th>
-                    <th className="px-6 py-4 font-RobotoCondensed font-bold">Admin</th>
-                    <th className="px-6 py-4 font-RobotoCondensed font-bold">Joined</th>
-                    <th className="px-6 py-4 font-RobotoCondensed font-bold">Actions</th>
+                    <th className="px-6 py-4 font-RobotoCondensed font-bold">Trạng thái</th>
+                    <th className="px-6 py-4 font-RobotoCondensed font-bold">Quyền hạn</th>
+                    <th className="px-6 py-4 font-RobotoCondensed font-bold">Thao tác</th>
                   </tr>
                 </thead>
                 <tbody>
                   {currentUsers.map((user) => (
                     <tr
                       key={user._id}
-                      className="border-b border-neutralColor hover:bg-lightestPrimaryColor transition-colors cursor-pointer"
-                      onClick={() => setSelectedUser(user)}
+                      className="border-b border-neutralColor hover:bg-lightestPrimaryColor transition-colors"
                     >
                       <td className="px-6 py-4 font-RobotoCondensed font-bold text-secondaryColor">
                         {user.username}
@@ -310,28 +296,46 @@ export const UserManagement = () => {
                           </span>
                         ) : (
                           <span className="px-3 py-1 rounded-full text-xs font-RobotoCondensed font-bold bg-gray-100 text-gray-800">
-                            User
+                            Người dùng
                           </span>
                         )}
                       </td>
-                      <td className="px-6 py-4 text-gray-600 font-OpenSans">
-                        {user.createdAt ? new Date(user.createdAt).toLocaleDateString("en-US", {
-                          year: "numeric",
-                          month: "short",
-                          day: "numeric",
-                        }) : "N/A"}
-                      </td>
                       <td className="px-6 py-4">
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            deleteUser(user._id, user.email);
-                          }}
-                          className="text-red-600 hover:text-red-800 font-bold transition-colors flex items-center gap-1"
-                        >
-                          <MdDelete className="w-5 h-5" />
-                          Delete
-                        </button>
+                        <div className="flex gap-2">
+                          {!user.adminStatus ? (
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                changeUserRoleToAdmin(user._id, user.email);
+                              }}
+                              disabled={actionLoading}
+                              className="text-green-600 hover:text-green-800 font-bold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                              Thành admin
+                            </button>
+                          ) : (
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                removeUserAdminRole(user._id, user.email);
+                              }}
+                              disabled={actionLoading}
+                              className="text-yellow-600 hover:text-yellow-800 font-bold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                              Bỏ admin
+                            </button>
+                          )}
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              deleteUser(user._id, user.email);
+                            }}
+                            className="text-red-600 hover:text-red-800 font-bold transition-colors flex items-center gap-1"
+                          >
+                            <MdDelete className="w-5 h-5" />
+                            xóa
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))}
@@ -347,7 +351,7 @@ export const UserManagement = () => {
                   disabled={currentPage === 1}
                   className="px-4 py-2 border-2 border-primaryColor text-primaryColor rounded-lg font-RobotoCondensed font-bold disabled:opacity-50 disabled:cursor-not-allowed hover:bg-lightestPrimaryColor transition-all"
                 >
-                  Previous
+                  Trang trước
                 </button>
 
                 {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
@@ -369,137 +373,19 @@ export const UserManagement = () => {
                   disabled={currentPage === totalPages}
                   className="px-4 py-2 border-2 border-primaryColor text-primaryColor rounded-lg font-RobotoCondensed font-bold disabled:opacity-50 disabled:cursor-not-allowed hover:bg-lightestPrimaryColor transition-all"
                 >
-                  Next
+                  Trang sau
                 </button>
               </div>
             )}
           </>
         ) : (
           <div className="text-center py-12">
-            <p className="text-gray-500 font-OpenSans text-lg">No users found</p>
+            <p className="text-gray-500 font-OpenSans text-lg">Không tìm thấy người dùng</p>
           </div>
         )}
       </div>
 
-      {/* User Details Modal */}
-      {selectedUser && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="bg-gradient-to-r from-primaryColor to-darkPrimaryColor text-white p-8 flex justify-between items-center sticky top-0">
-              <h3 className="text-2xl font-RobotoSlab font-bold">User Details</h3>
-              <button
-                onClick={() => setSelectedUser(null)}
-                className="text-2xl font-bold hover:opacity-80 transition-opacity"
-              >
-                ✕
-              </button>
-            </div>
 
-            <div className="p-8 space-y-6">
-              <div className="grid grid-cols-2 gap-6">
-                <DetailItem label="Username" value={selectedUser.username} />
-                <DetailItem label="Email" value={selectedUser.email} />
-              </div>
-
-              <div className="grid grid-cols-2 gap-6">
-                <DetailItem
-                  label="Status"
-                  value={
-                    <span
-                      className={`px-3 py-1 rounded-full text-xs font-RobotoCondensed font-bold ${
-                        selectedUser.verificationStatus === "verified"
-                          ? "bg-green-100 text-green-800"
-                          : "bg-yellow-100 text-yellow-800"
-                      }`}
-                    >
-                      {selectedUser.verificationStatus}
-                    </span>
-                  }
-                />
-                <DetailItem
-                  label="Role"
-                  value={
-                    <span
-                      className={`px-3 py-1 rounded-full text-xs font-RobotoCondensed font-bold ${
-                        selectedUser.adminStatus
-                          ? "bg-purple-100 text-purple-800"
-                          : "bg-gray-100 text-gray-800"
-                      }`}
-                    >
-                      {selectedUser.adminStatus ? "Admin" : "User"}
-                    </span>
-                  }
-                />
-              </div>
-
-              {selectedUser.address && (
-                <DetailItem label="Address" value={selectedUser.address} icon={<MdLocationOn />} />
-              )}
-              {selectedUser.city && (
-                <DetailItem
-                  label="City"
-                  value={`${selectedUser.city}${selectedUser.country ? ", " + selectedUser.country : ""}`}
-                />
-              )}
-              {selectedUser.postalCode && <DetailItem label="Postal Code" value={selectedUser.postalCode} />}
-
-              <DetailItem
-                label="Phone"
-                value={selectedUser.phoneNumber || "Not provided"}
-                icon={<MdPhone />}
-              />
-
-              <DetailItem
-                label="Orders"
-                value={selectedUser.orders?.length || 0}
-                icon={<MdShoppingCart />}
-              />
-
-              <DetailItem
-                label="Joined"
-                value={new Date(selectedUser.createdAt).toLocaleDateString("en-US", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })}
-              />
-
-              <div className="pt-6 border-t border-neutralColor space-y-3">
-                {selectedUser.adminStatus ? (
-                  <button
-                    onClick={() => {
-                      removeUserAdminRole(selectedUser._id, selectedUser.email);
-                    }}
-                    disabled={actionLoading}
-                    className="w-full bg-yellow-600 hover:bg-yellow-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-RobotoCondensed font-bold py-3 px-6 rounded-lg transition-all"
-                  >
-                    {actionLoading ? "Processing..." : "Revoke Admin Status"}
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => {
-                      changeUserRoleToAdmin(selectedUser._id, selectedUser.email);
-                    }}
-                    disabled={actionLoading}
-                    className="w-full bg-green-600 hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-RobotoCondensed font-bold py-3 px-6 rounded-lg transition-all"
-                  >
-                    {actionLoading ? "Processing..." : "Make Admin"}
-                  </button>
-                )}
-                <button
-                  onClick={() => {
-                    deleteUser(selectedUser._id, selectedUser.email);
-                  }}
-                  className="w-full bg-red-600 hover:bg-red-700 text-white font-RobotoCondensed font-bold py-3 px-6 rounded-lg transition-all flex items-center justify-center gap-2"
-                >
-                  <MdDelete className="w-5 h-5" />
-                  Delete User
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </section>
   );
 };
@@ -515,15 +401,4 @@ const StatCard = ({ icon, title, value, gradient }) => (
   </div>
 );
 
-// Detail Item Component
-const DetailItem = ({ label, value, icon }) => (
-  <div>
-    <div className="flex items-center gap-2 mb-2">
-      {icon && <span className="text-primaryColor">{icon}</span>}
-      <label className="text-xs font-RobotoCondensed font-bold text-gray-600 uppercase tracking-wider">
-        {label}
-      </label>
-    </div>
-    <p className="text-lg font-OpenSans text-secondaryColor">{value}</p>
-  </div>
-);
+

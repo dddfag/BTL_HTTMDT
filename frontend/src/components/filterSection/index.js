@@ -96,7 +96,7 @@ export const FilterBySection = ({
     >
       <section className="flex lg:w-[100%]  flex-col md:w-[50%] md:max-w-[450px] tablet:w-[60%] tablet:max-w-[400px] max-w-[360px] lg:z-0 z-[2000] overflow-y-auto absolute top-0 bg-white items-start px-[5%] lg:px-0 w-[80%] right-0 pt-4 pb-12 gap-7 tracking-[0.25px] text-lg h-[100%] lg:static ">
         <h2 className="text-center w-[100%] text-[1.75rem] mt-2 font-bold border-b-[2px] border-LightSecondaryColor pb-2">
-          Filter by
+          Xắp xếp theo
         </h2>
         <IoCloseOutline
           className="absolute top-5 right-4 w-9 h-9 cursor-pointer lg:hidden"
@@ -127,7 +127,7 @@ export const FilterBySection = ({
               isScreenAbove1024 ? setIsFilterBySectionOpen(true) : setIsFilterBySectionOpen(false);
             }}
           >
-            Filter
+            Áp dụng
           </motion.button>
           <motion.button
             whileHover={{ backgroundColor: "#000000", borderWidth: "0px", color: "#ffffff" }}
@@ -140,7 +140,7 @@ export const FilterBySection = ({
               isScreenAbove1024 ? setIsFilterBySectionOpen(true) : setIsFilterBySectionOpen(false);
             }}
           >
-            Reset Filter
+            Đặt lại
           </motion.button>
         </div>
       </section>

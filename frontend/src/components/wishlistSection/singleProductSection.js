@@ -5,6 +5,7 @@ import { handleWishlistModification } from "../../utils/handleWishlistModificati
 import { handleCartModification } from "../../utils/handleCartModification";
 import { isProductInCartFn } from "../../utils/isSpecificProductInCartAndWishlist.js";
 import { useNavigate } from "react-router-dom";
+import { formatPriceVND } from "../../utils/priceFormatter";
 
 export const SingleProductSection = ({ wishlistData, setIsWishlistActive }) => {
   const [isProductInCart, setIsProductInCart] = useState(false);
@@ -30,7 +31,7 @@ export const SingleProductSection = ({ wishlistData, setIsWishlistActive }) => {
       </div>
       <div className="flex flex-col gap-2 w-[50%] text-base">
         <h2 className="md:text-[18px] font-medium font-RobotoSlab capitalize">{title}</h2>
-        <h3 className="font-bold md:text-[18px] tracking-wide">${price.toFixed(2)}</h3>
+        <h3 className="font-bold md:text-[18px] tracking-wide">{formatPriceVND(price)}</h3>
         <span className="text-primaryColor font-RobotoCondensed tracking-[0.7px]">
           {stock < 0 ? "Out of stock" : <strong>{stock}</strong>}
           {stock >= 0 && " left in stock"}

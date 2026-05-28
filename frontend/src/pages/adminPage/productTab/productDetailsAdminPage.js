@@ -37,22 +37,22 @@ export const ProductDetailsModal = ({
               <img src={image} className="w-full  max-h-full h-auto object-contain " alt="Product" />
             </div>
             <div className="flex flex-col items-center mb-4">
-              <h4 className=" mb-2">Product Title</h4> <span className=" text-lg font-bold capitalize">{title}</span>
+              <h4 className=" mb-2">Tiêu đề sản phẩm</h4> <span className=" text-lg font-bold capitalize">{title}</span>
             </div>
             <div className="flex flex-col items-center mb-4">
-              <h4 className=" ">Price</h4> <span className=" text-lg font-bold">{price} USD</span>
+              <h4 className=" ">Giá tiền</h4> <span className=" text-lg font-bold">{price} USD</span>
             </div>
             <div className="flex flex-col items-center mb-4">
-              <h4 className=" ">sub-categories</h4>{" "}
+              <h4 className=" ">Danh mục phụ</h4>{" "}
               <span className=" text-lg font-bold text-center">
                 {" "}
                 {subCategoriesArr.map((categories) => categories).join(", ")}
               </span>
             </div>
-            <h4 className="  text-lg font-bold mb-4">{stock} in Stock</h4>
+            <h4 className="  text-lg font-bold mb-4">{stock} trong kho</h4>
             {discountPercentValue > 0 && (
               <div className="flex flex-col items-center mb-4">
-                <h4 className=" ">Discount percent</h4>{" "}
+                <h4 className=" ">Phần trăm giảm giá</h4>{" "}
                 <span className=" text-lg font-bold">-{discountPercentValue}%</span>
               </div>
             )}
