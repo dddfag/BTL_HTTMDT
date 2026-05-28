@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "buildCommand": "cd frontend && CI=false npm run build",
-  "outputDirectory": "frontend/build",
+  "buildCommand": "npm run build",
+  "outputDirectory": "build",
   "env": {
     "CI": "false",
     "DISABLE_ESLINT_PLUGIN": "true"
-  }
+  },
+  "root": "frontend"
 }
