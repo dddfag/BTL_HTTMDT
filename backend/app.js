@@ -54,12 +54,33 @@ setInterval(clearAdminJwt, 6 * 60 * 60 * 1000);
 
 const port = process.env.PORT || 5000;
 
+let dbConnected = false;
+
+// Healthcheck endpoint - doesn't require DB
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'ok', dbConnected });
+});
+
 const startServer = async () => {
   try {
-    await connectDb(process.env.MONGO_URI);
-    app.listen(port, () => console.log(`Server is listening on port ${port}`));
+    // Start server immediately
+    app.listen(port, () => {
+      console.log(`Server is listening on port ${port}`);
+    });
+
+    // Connect to MongoDB in background
+    try {
+      await connectDb(process.env.MONGO_URI);
+      dbConnected = true;
+      console.log('MongoDB connected successfully');
+    } catch (dbError) {
+      console.error('MongoDB connection failed:', dbError.message);
+      console.error('Full error:', dbError);
+      // Don't exit - app can still serve requests
+    }
   } catch (error) {
     console.error('Failed to start server:', error.message);
+    console.error('Full error:', error);
     process.exit(1);
   }
 };
